@@ -52,7 +52,11 @@ Shader "Projector/Light" {
 				fixed4 texF = tex2Dproj (_FalloffTex, UNITY_PROJ_COORD(i.uvFalloff));
 				fixed4 res = texS * texF.a;
 
+<<<<<<< HEAD
 				UNITY_APPLY_FOG_COLOR(i.fogCoord, res, fixed4(0,0,0,0));
+=======
+				UNITY_APPLY_FOG_COLOR(i.fogCoord, res, fixed4(1,1,1,1));
+>>>>>>> Add in echolocation test
 				return res;
 			}
 			ENDCG
