@@ -22,19 +22,28 @@ public class Health : MonoBehaviour
 	
 	void OnCollisionEnter (Collision col)
 	{
-		if ((col.gameObject.tag == "enemy" || col.gameObject.tag == "trap") && !hit) {
-			currHealth -= col.gameObject.tag == "enemy" ? col.gameObject.GetComponent<Enemy> ().damage : col.gameObject.GetComponent<Trap> ().damage;
-			hit = true;
+        Debug.Log("collision");
+		if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "Trap") && !hit) {
+            Debug.Log("ouch");
+            currHealth -= col.gameObject.tag == "Enemy" ? col.gameObject.GetComponent<Enemy> ().damage : col.gameObject.GetComponent<Trap> ().damage;
+            currHealth = Mathf.Clamp(currHealth, 0, maxHealth);
+            hit = true;
 			hitTime = System.DateTime.Now.Ticks * 10000;
 		}
 	}
 	
 	void Update ()
 	{
+        //Debug.Log(currHealth);
 		if (hit) {
 			if ((System.DateTime.Now.Ticks * 10000) - hitTime > (invincibilityTime / 1000)) {
 				hit = false;
 			}
 		}
+	}
+	
+	public float GetHealthPercentage ()
+	{
+        return ((float)currHealth) / ((float)maxHealth);
 	}
 }
