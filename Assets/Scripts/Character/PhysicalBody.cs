@@ -1,9 +1,11 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
+using UnityEngine.Networking;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
-public class PhysicalBody : MonoBehaviour 
+public class PhysicalBody :  NetworkBehaviour
 {
     public float speed;
     public float jumpHeight;
@@ -23,6 +25,9 @@ public class PhysicalBody : MonoBehaviour
 
     void Update()
     {
+        //Don't move other people plz.
+        if (!isLocalPlayer) return;
+
         float yMovement = 0;
         if(controller.isGrounded && !jumping)
         {

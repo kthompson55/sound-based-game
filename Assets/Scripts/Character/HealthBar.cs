@@ -5,7 +5,7 @@ using System.Collections;
 public class HealthBar : MonoBehaviour
 {
     public GameObject player;
-    private Health playerHealth;
+    public Health playerHealth;
 	private RectTransform rectTrans;
 	
 	public void Start ()
@@ -23,5 +23,10 @@ public class HealthBar : MonoBehaviour
 	public void Update ()
 	{
         transform.localScale = new Vector3(playerHealth.GetHealthPercentage(), 1, 1);//.x = playerHealth.GetHealthPercentage();
-	}	
+	}
+
+    public void SetHealth(Health newPlayerHealth)
+    {
+        playerHealth = newPlayerHealth;
+    }
 }

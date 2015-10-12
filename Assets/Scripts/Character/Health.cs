@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
 [RequireComponent(typeof(BoxCollider))]
@@ -6,8 +7,9 @@ using System.Collections;
 public class Health : MonoBehaviour
 {
 	public int maxHealth;
-	private int currHealth;
-	private BoxCollider collisionBox;
+	public int currHealth;
+    private BoxCollider collisionBox;
+    public Image hpBar;
 	
 	public float invincibilityTime = 0.5f;
 	private bool hit;
@@ -18,6 +20,11 @@ public class Health : MonoBehaviour
 		currHealth = maxHealth;
 		collisionBox = GetComponent<BoxCollider> ();
 		hit = false;
+        GameObject can = GameObject.Find("Canvas");
+        Debug.Log("Can is: " + can.name);
+        Image img = can.GetComponentInChildren<Image>();
+        Debug.Log("Image is: " + img.name);
+        img.GetComponent<HealthBar>().SetHealth(this);
 	}
 	
 	void OnCollisionEnter (Collision col)
