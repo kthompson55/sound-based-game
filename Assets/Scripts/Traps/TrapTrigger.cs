@@ -5,15 +5,22 @@ public class TrapTrigger : MonoBehaviour
 {
     private bool triggered;
     private long triggeredTime;
-    public Trap attached;
-    private Animator trapAnimator;
+    public Trap[] attachedTraps;
+    private Animator[] trapAnimators;
+    public float cooldown;
 
     void Start() {
         triggered = false;
-        trapAnimator = attached.GetComponent<Animator>();
-        if (!trapAnimator) {
-            Debug.LogError("No Trap Animator for this trap! Trap name: " + gameObject.name);
+
+        trapAnimators = new Animator[attachedTraps.Length];
+        for(int i = 0; i < attachedTraps.Length; i ++){
+            trapAnimators[i] = attachedTraps[i].GetComponent<Animator>();
+            if (!trapAnimators[i])
+            {
+                Debug.LogError("No Trap Animator for this trap! Trap name: " + attachedTraps[i].name);
+            }
         }
+        
     }
 
     void OnTriggerEnter(Collider col) {
@@ -21,14 +28,19 @@ public class TrapTrigger : MonoBehaviour
         {
             Debug.Log("Trap triggered!!");
             triggered = true;
-            trapAnimator.SetBool("triggered", triggered);
+            foreach (Animator anim in trapAnimators) {
+                anim.SetBool("triggered", triggered);
+            }
             triggeredTime = System.DateTime.Now.Ticks * 10000;
         }
     }
 
     public void ResetTrigger() {
         triggered = false;
-        trapAnimator.SetBool("triggered", triggered);
+        foreach (Animator anim in trapAnimators)
+        {
+            anim.SetBool("triggered", triggered);
+        }
     }
 
     public bool IsTriggered() {
@@ -38,4 +50,16 @@ public class TrapTrigger : MonoBehaviour
     public long GetTriggeredTime() {
         return triggeredTime;
     }
+
+    void Update() {
+        if (triggered) {
+            if ((System.DateTime.Now.Ticks * 10000) - triggeredTime > (cooldown / 1000)) {
+                triggered = false;
+            }
+        }
+    }
+
+    //when the player enters the trigger, sets the triggered animator variable for all of the attached traps
+    //traps then 
+
 }
