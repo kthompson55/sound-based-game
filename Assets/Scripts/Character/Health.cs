@@ -22,7 +22,6 @@ public class Health : MonoBehaviour
 	
 	void OnCollisionEnter (Collision col)
 	{
-        Debug.Log("collision");
 		if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "Trap") && !hit) {
             Debug.Log("ouch");
             currHealth -= col.gameObject.tag == "Enemy" ? col.gameObject.GetComponent<Enemy> ().damage : col.gameObject.GetComponent<Trap> ().damage;
