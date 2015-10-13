@@ -1,7 +1,13 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: 30e147d26c826604eaacb7e3e11cb580
 folderAsset: yes
 timeCreated: 1444698623
+=======
+guid: a38c43a5875d3b5449eff4d7b88b7869
+folderAsset: yes
+timeCreated: 1444315693
+>>>>>>> Add in echolocation test
 licenseType: Free
 DefaultImporter:
   userData: 
