@@ -1,0 +1,26 @@
+﻿using UnityEngine;
+using System.Collections;
+
+[RequireComponent(typeof(Camera))]
+public class CameraControls : MonoBehaviour 
+{
+    public float velocity;
+    public float cameraDistance;
+    public float cameraHeight;
+    public float turnSpeed;
+    public Transform player;
+
+    private Vector3 offset;
+
+    void Start() 
+    {
+        offset = new Vector3(0, cameraHeight, cameraDistance);
+    }
+
+    void LateUpdate()
+    {
+        offset = Quaternion.AngleAxis(Input.GetAxis("RotateCamera") * turnSpeed, Vector3.up) * offset;
+        transform.position = player.position + offset;
+        transform.LookAt(player.position);
+    }
+}
