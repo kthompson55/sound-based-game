@@ -16,6 +16,10 @@ public class EchoSpawner : MonoBehaviour {
 
     public float fade = 0.0f;
 
+    private int echolLocation;
+
+    private EchoManager listener;
+
 	// Use this for initialization
 	void Start () {
 
@@ -32,6 +36,7 @@ public class EchoSpawner : MonoBehaviour {
         {
             currentRadius = 0.0f;
             fade = 0.0f;
+            listener.spotOpen(echolLocation);
             Destroy(this.gameObject);
         }
         else
@@ -42,6 +47,21 @@ public class EchoSpawner : MonoBehaviour {
 
 	}
 
+    public void subscribeToDeath(EchoManager manager)
+    {
+        listener = manager;
+    }
+
+    public void setEchoLocation(int location)
+    {
+        echolLocation = location;
+    }
+
+    public int getEchoLocation()
+    {
+        return echolLocation;
+    }
+
     void updateShader()
     {
         if (dt > fadeDelay)
@@ -49,11 +69,10 @@ public class EchoSpawner : MonoBehaviour {
             fade += Time.deltaTime * fadeRate;
         }
 
-
-        echoMaterial.SetVector("_Position", transform.position);
-        echoMaterial.SetFloat("_Radius", currentRadius);
-        echoMaterial.SetFloat("_MaxRadius", maxRadius);
-        echoMaterial.SetFloat("_Fade", fade);
+        echoMaterial.SetVector("_Position"+echolLocation, transform.position);
+        echoMaterial.SetFloat("_Radius"+echolLocation, currentRadius);
+        echoMaterial.SetFloat("_MaxRadius"+echolLocation, maxRadius);
+        echoMaterial.SetFloat("_Fade"+echolLocation, fade);
         echoMaterial.SetFloat("_MaxFade", maxRadius/echoSpeed);
     }
 }

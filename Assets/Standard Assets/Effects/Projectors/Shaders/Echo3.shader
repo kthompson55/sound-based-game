@@ -47,17 +47,13 @@ Shader "Custom/Echo/Simple" {
 			if(_Radius >= 3*_MaxRadius || dist >= _Radius){
 				return _MainColor.rgb;//tex2D (_MainTex, IN.uv_MainTex).rgb;
 			} else {
-				// If _DistanceFade = true, fading is related to vertex distance from echo origin.
-				// If false, fading is even across entire echo.
+
 				float c1 = (_DistanceFade>=1.0)?dist/_Radius:1.0;
 				
-				// Apply fading effect.
-				c1 *= (_Fade<=_MaxFade)?1.0-_Fade/_MaxFade:0.0;	//adjust by fade distance.
+				c1 *= (_Fade<=_MaxFade)?1.0-_Fade/_MaxFade:0.0;	
 				
-				// Ignore Fade values <= 0 (meaning no fade.)
 				c1 = (_Fade<=0)?1.0:c1;
 				
-				// Amount of blur from base color
 				float c2 = 1 - c1;
 				
 				// Return c2% of main color and c1% of actual texture color.
