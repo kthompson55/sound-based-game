@@ -15,7 +15,6 @@ public class Enemy : MonoBehaviour
     private CharacterController controller;
     private Vector3 fromPosition;
     private Vector3 targetPosition;
-    private Vector3 lastSeenPlayerLocation; //when the player enters the FOV of enemy, this will be updated by enemyFOV script
     private float yMovement = 0;
     private float waitStart;
     private int nextNodeIndex;
@@ -26,12 +25,16 @@ public class Enemy : MonoBehaviour
         nextNodeIndex = 0;
         waitStart = 0;
         controller = GetComponent<CharacterController>();
-        if (pathPoints.Length > 0)
-            transform.position = pathPoints[nextNodeIndex].transform.position;
+        if (pathPoints.Length > 0) {
+            Vector3 starting = pathPoints[nextNodeIndex].transform.position;
+            starting.y = transform.position.y;
+            transform.position = starting;
+            NextTarget();
+        }
+            
 
         fromPosition = transform.position;
         targetPosition = transform.position;
-        NextTarget();
         isChasing = false;
         isWaiting = false;
     }
@@ -41,16 +44,17 @@ public class Enemy : MonoBehaviour
         //waiting after reaching chase location
         if (isWaiting) 
         {
-            Vector3 path = new Vector3();
             if ((System.DateTime.Now.Ticks * 10000) - waitStart > (waitDuration / 1000))
             {
                 isWaiting = false;
-                ChangeTarget(pathPoints[nextNodeIndex].transform.position);
+                if(pathPoints.Length > 0)
+                    ChangeTarget(pathPoints[nextNodeIndex].transform.position);
             }
         } 
         else if (isChasing) 
         {
             Vector3 path = targetPosition - fromPosition;
+            path.y = 0;
             Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
             controller.Move(new Vector3(direction.x, yMovement, direction.z));
             if (ReachedOrOverShotTarget(path, targetPosition))
@@ -63,6 +67,7 @@ public class Enemy : MonoBehaviour
         //don't patrol if chasing
         else if (isPatrolling)  {
             Vector3 path = targetPosition - fromPosition;
+            path.y = 0;
             Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
             controller.Move(new Vector3(direction.x, yMovement, direction.z));
             if (ReachedOrOverShotTarget(path, targetPosition)){
@@ -75,7 +80,8 @@ public class Enemy : MonoBehaviour
 
 
     bool ReachedOrOverShotTarget(Vector3 path, Vector3 target){
-        return (transform.position == target
+        return ( 
+            (transform.position.z == target.z && transform.position.x == target.x)
             || Vector3.Magnitude(fromPosition - transform.position) > Vector3.Magnitude(path));
     }
     //auto change chase target to next point in path points []
@@ -101,15 +107,15 @@ public class Enemy : MonoBehaviour
 
 
 //enemy patrols around nodes
-//TODO if player is within fov range, will update lastSeenPosition
+//if player is within fov range, will update lastSeenPosition
     //TODO fov will continue to check if player is in range depending on enemy's reaction time
         //TODO slower reactions will result in a less constant check
-//TODO enemy will lerp towards lastSeenPosition 
+//enemy will lerp towards lastSeenPosition 
     //damage player on collision
-    //TODO ensure enemy collider object also has enemy tag
-//TODO Once enemy reaches the last seen position
-    //TODO if player is no longer in range
-        //TODO wait for a moment
-        //TODO then go back to patrolling (resume targeting last node target)
+    //ensure enemy collider object also has enemy tag
+//Once enemy reaches the last seen position
+    // if player is no longer in range
+        //wait for a moment
+        //then go back to patrolling (resume targeting last node target)
     //FOV TODO if player is still in range
         //TODO reset fov reaction timer
