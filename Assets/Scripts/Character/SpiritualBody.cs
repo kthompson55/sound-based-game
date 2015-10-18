@@ -19,13 +19,41 @@ public class SpiritualBody : MonoBehaviour
         
     void Update()
     {
+
+        UpdateIsAttacking();
         UpdateAttack();
+    }
+
+    void UpdateIsAttacking()
+    {
+        if (!attacking&&!returning&&Input.GetMouseButtonDown(0))
+        {
+            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                float angle = 0.0f;
+                float y = 0.0f;
+                float x = 0.0f;
+                y = hit.point.z - transform.position.z;
+                x = hit.point.x - transform.position.x;
+                angle = Mathf.Atan(y / x);
+                if (x < 0)
+                {
+                    angle += (Mathf.PI / 2);
+                    angle += (Mathf.PI / 2);
+                }
+
+                Attack(angle);
+            }
+        }
     }
 
     float attackAngle = 90;
     bool active = false;
     Vector3 attackStart;
     Vector3 attackTarget;
+    bool returning = false;
     void UpdateAttack() {
 
         //attack input has been handled and should now be lerping
@@ -39,6 +67,10 @@ public class SpiritualBody : MonoBehaviour
                 {
                     active = false;
                 }
+            }
+            else
+            {
+                attacking = false;
             }
         }
         //if not at body return to body
@@ -54,14 +86,14 @@ public class SpiritualBody : MonoBehaviour
     }
 
     void ReturnToBody() {
-        lerpToPosition(physicalBody.transform.position);
+        returning=!lerpToPosition(physicalBody.transform.position);
     }
 
     public void Attack(float angle) {
         if(!attacking){
             attackStart = transform.position;
             Vector2 displacementVector = GetDisplacementVector(angle);
-            Vector3 attackTarget = attackStart + new Vector3(displacementVector.x, 0, displacementVector.y);
+            attackTarget = attackStart + new Vector3(displacementVector.x, 0, displacementVector.y);
             attacking = active = true;
         }
     }
