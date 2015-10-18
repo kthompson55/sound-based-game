@@ -19,6 +19,15 @@ public class CameraControls : MonoBehaviour
 
     void LateUpdate()
     {
+        if (player == null)
+        {
+            GameObject play = GameObject.Find("PhysicalBodyLocal(Clone)");
+            if (play != null)
+            {
+                player = play.transform;
+            }
+        }
+
         offset = Quaternion.AngleAxis(Input.GetAxis("RotateCamera") * turnSpeed, Vector3.up) * offset;
         transform.position = player.position + offset;
         transform.LookAt(player.position);

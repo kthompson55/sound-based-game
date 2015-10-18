@@ -6,8 +6,16 @@ public class MyNetworkManager : NetworkManager {
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
-        Vector3 spawnPos = Vector3.back * conn.connectionId * 2;
-        GameObject player = (GameObject)Instantiate(base.playerPrefab, spawnPos, Quaternion.identity);
+        Vector3 spawnPos = new Vector3(-20.0f, 1.5f, -14.0f);
+        GameObject player;
+        if (conn.connectionId < 0)
+        {
+            player = (GameObject)Instantiate(base.playerPrefab, spawnPos, Quaternion.identity);
+        }
+        else
+        {
+            player = (GameObject)Instantiate(spawnPrefabs[0], spawnPos, Quaternion.identity);
+        }
 
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
     }
