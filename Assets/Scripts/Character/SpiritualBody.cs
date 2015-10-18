@@ -26,7 +26,7 @@ public class SpiritualBody : MonoBehaviour
 
     void UpdateIsAttacking()
     {
-        if (Input.GetMouseButtonDown(0))
+        if (!attacking&&!returning&&Input.GetMouseButtonDown(0))
         {
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
@@ -53,6 +53,7 @@ public class SpiritualBody : MonoBehaviour
     bool active = false;
     Vector3 attackStart;
     Vector3 attackTarget;
+    bool returning = false;
     void UpdateAttack() {
 
         //attack input has been handled and should now be lerping
@@ -85,7 +86,7 @@ public class SpiritualBody : MonoBehaviour
     }
 
     void ReturnToBody() {
-        lerpToPosition(physicalBody.transform.position);
+        returning=!lerpToPosition(physicalBody.transform.position);
     }
 
     public void Attack(float angle) {
