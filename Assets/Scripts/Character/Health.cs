@@ -21,10 +21,15 @@ public class Health : MonoBehaviour
 		collisionBox = GetComponent<BoxCollider> ();
 		hit = false;
         GameObject can = GameObject.Find("Canvas");
-        Debug.Log("Can is: " + can.name);
-        Image img = can.GetComponentInChildren<Image>();
-        Debug.Log("Image is: " + img.name);
-        img.GetComponent<HealthBar>().SetHealth(this);
+        if (can) { 
+            Debug.Log("Can is: " + can.name);
+            Image img = can.GetComponentInChildren<Image>();
+            Debug.Log("Image is: " + img.name);
+            img.GetComponent<HealthBar>().SetHealth(this);
+        }
+        else {
+            Debug.Log("No canvas, cannot display health");
+        }
 	}
 
     void Update()
