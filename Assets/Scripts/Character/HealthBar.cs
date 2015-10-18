@@ -5,7 +5,7 @@ using System.Collections;
 public class HealthBar : MonoBehaviour
 {
     public GameObject player;
-    public Health playerHealth;
+    private Health playerHealth;
 	private RectTransform rectTrans;
 	
 	public void Start ()
