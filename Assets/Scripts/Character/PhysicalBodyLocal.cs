@@ -56,9 +56,10 @@ public class PhysicalBodyLocal : MonoBehaviour
         float xMovement = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         float zMovement = Input.GetAxis("Vertical") * Time.deltaTime * speed;
 
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, Camera.main.transform.localEulerAngles.y, transform.localEulerAngles.z);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, followingCamera.transform.localEulerAngles.y, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
+        Debug.Log(moveVector);
         controller.Move(cameraRotation * moveVector);
     }
 }
