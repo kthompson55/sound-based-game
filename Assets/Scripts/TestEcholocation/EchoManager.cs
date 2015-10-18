@@ -13,32 +13,6 @@ public class EchoManager : MonoBehaviour {
 
     private int nextAvaibleSpot=0;
 
-	// Use this for initialization
-	void Start () {
-        
-	}
-	
-	// Update is called once per frame
-	void Update () {
-
-        if (Input.GetMouseButtonDown(0)&&!stop)
-        {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-            RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
-            {
-                spawnAnEchoLocation(hit.point);
-            }
-            stop = true;
-        }
-
-        if (Input.GetMouseButtonUp(0))
-        {
-            stop = false;
-        }
-
-	}
-
     public void spotOpen(int whatSpot)
     {
         if (whatSpot < nextAvaibleSpot)
@@ -57,6 +31,15 @@ public class EchoManager : MonoBehaviour {
         ((GameObject)temp).GetComponent<EchoSpawner>().setEchoLocation(nextAvaibleSpot);
 
         getNextSpot();
+    }
+
+    private void testCode(Vector3 where)
+    {
+        Ray r = new Ray(where, Vector3.down);
+        RaycastHit hit;
+        if(Physics.Raycast(r,out hit,Mathf.Infinity){
+            spawnAnEchoLocation(hit.point);
+        }
     }
 
     private void getNextSpot()
