@@ -43,7 +43,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         }
         if (otherCamera == null)
         {
-            Debug.Log("No other physical");
+            //Debug.Log("No other physical");
             GameObject newCam = GameObject.Find("SpiritualCamera");
             if (newCam != null)
             {
@@ -53,7 +53,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         }
 
         followingCamera.SetActive(true);
-        otherCamera.SetActive(false);
+        //otherCamera.SetActive(false);
 #endregion
 
         float yMovement = 0;

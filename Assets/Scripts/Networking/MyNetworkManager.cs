@@ -6,7 +6,7 @@ public class MyNetworkManager : NetworkManager {
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
-        Vector3 spawnPos = new Vector3(60f, 66f, 135f);
+        Vector3 spawnPos = new Vector3(59.97f, 65f, 136f);
 
         GameObject player;
         if (conn.connectionId < 0)
