@@ -30,7 +30,11 @@ public class PhysicalBodyLocal : NetworkBehaviour
         //Don't move other people plz.
         if (!isLocalPlayer) return;
 
+<<<<<<< HEAD
         #region Camera Fixes
+=======
+
+>>>>>>> origin/Week2-Playtest
         if (followingCamera == null)
         {
             Debug.Log("No following physical");
@@ -54,7 +58,11 @@ public class PhysicalBodyLocal : NetworkBehaviour
 
         followingCamera.SetActive(true);
         otherCamera.SetActive(false);
+<<<<<<< HEAD
 #endregion
+=======
+
+>>>>>>> origin/Week2-Playtest
 
         float yMovement = 0;
         if (controller.isGrounded && !jumping)

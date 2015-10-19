@@ -10,6 +10,7 @@ public class SpiritCameraControls : MonoBehaviour {
 
     private Vector3 offset;
 
+<<<<<<< HEAD
     // Use this for initialization
     void Start()
     {
@@ -17,6 +18,13 @@ public class SpiritCameraControls : MonoBehaviour {
 	
 	}
 	    
+=======
+    void Start()
+    {
+        offset = new Vector3(0, cameraHeight, cameraDistance);
+    }
+
+>>>>>>> origin/Week2-Playtest
     void LateUpdate()
     {
         if (player == null)

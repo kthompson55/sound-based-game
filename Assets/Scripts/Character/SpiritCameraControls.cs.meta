@@ -1,6 +1,11 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: a73cdca4b8e46954c8f3d7833afb6a50
 timeCreated: 1445211384
+=======
+guid: 0b6c324a8ae9b76438a78c490a2ed43e
+timeCreated: 1445194869
+>>>>>>> origin/Week2-Playtest
 licenseType: Free
 MonoImporter:
   serializedVersion: 2

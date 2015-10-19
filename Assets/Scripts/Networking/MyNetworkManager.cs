@@ -6,7 +6,11 @@ public class MyNetworkManager : NetworkManager {
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
+<<<<<<< HEAD
         Vector3 spawnPos = new Vector3(60f, 66f, 135f);
+=======
+        Vector3 spawnPos = new Vector3(-20.0f, 1.5f, -14.0f);
+>>>>>>> origin/Week2-Playtest
         GameObject player;
         if (conn.connectionId < 0)
         {
