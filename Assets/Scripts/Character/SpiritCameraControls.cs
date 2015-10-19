@@ -20,7 +20,7 @@ public class SpiritCameraControls : MonoBehaviour {
     {
         if (player == null)
         {
-            GameObject play = GameObject.Find("SpiritualPlayer_1(Clone)");
+            GameObject play = GameObject.Find("PhysicalBody_working(Clone)");
             if (play != null)
             {
                 player = play.transform;

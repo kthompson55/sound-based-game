@@ -53,7 +53,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         }
 
         followingCamera.SetActive(true);
-        //otherCamera.SetActive(false);
+        otherCamera.SetActive(false);
 #endregion
 
         float yMovement = 0;
