@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class SpiritualBody : MonoBehaviour
-{
+public class SpiritualBody : NetworkBehaviour
+{   
     public float attackRange;
     public float speed;
     public GameObject followingCamera;
@@ -22,6 +23,7 @@ public class SpiritualBody : MonoBehaviour
     void Update()
     {
         #region Camera Fixes
+        if (!isLocalPlayer) return;
 
         if (followingCamera == null)
         {
@@ -42,7 +44,7 @@ public class SpiritualBody : MonoBehaviour
 
         if (physicalBody == null)
         {
-            GameObject newBod = GameObject.Find("PhysicalBodyLocal(Clone)");
+            GameObject newBod = GameObject.Find("PhysicalBody_working(Clone)");
             if (newBod != null)
             {
                 physicalBody = newBod.GetComponent<PhysicalBodyLocal>();
