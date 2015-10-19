@@ -3,11 +3,12 @@ using UnityEngine.Networking;
 using System.Collections;
 
 public class SpiritualBody : NetworkBehaviour
-{   
+{
     public float attackRange;
     public float speed;
     public GameObject followingCamera;
     public GameObject otherCamera;
+    public GameObject EchoManage;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
@@ -25,12 +26,23 @@ public class SpiritualBody : NetworkBehaviour
         #region Camera Fixes
         if (!isLocalPlayer) return;
 
+        if (!isLocalPlayer) return;
+
+        if (EchoManage == null)
+        {
+            GameObject echo = GameObject.Find("EchoManager");
+            if (echo != null)
+            {
+                EchoManage = echo;
+            }
+        }
+
         if (followingCamera == null)
         {
-            GameObject newCam = GameObject.Find("SpiritualCamera");
-            if (newCam != null)
+            GameObject newSpiritCam = GameObject.Find("SpiritualCamera");
+            if (newSpiritCam != null)
             {
-                followingCamera = newCam;
+                followingCamera = newSpiritCam;
             }
         }
         if (otherCamera == null)
@@ -61,9 +73,19 @@ public class SpiritualBody : NetworkBehaviour
 
     void UpdateIsAttacking()
     {
+        if (Input.GetMouseButtonDown(1))
+        {
+            Ray ray = ((Camera)followingCamera.GetComponent<Camera>()).ScreenPointToRay(Input.mousePosition);
+            RaycastHit hit;
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            {
+                EchoManage.GetComponent<EchoManager>().spawnAnEchoLocation(hit.point);
+            }
+        }
+
         if (!attacking&&!returning&&Input.GetMouseButtonDown(0))
         {
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+            Ray ray = ((Camera)followingCamera.GetComponent<Camera>()).ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
@@ -155,5 +177,4 @@ public class SpiritualBody : NetworkBehaviour
         transform.position = endMovePos;
         return reachedTarget;
     }
-
 }

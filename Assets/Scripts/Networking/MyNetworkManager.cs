@@ -4,6 +4,13 @@ using System.Collections;
 
 public class MyNetworkManager : NetworkManager {
 
+    void Start()
+    {
+        NetworkManager.singleton.StartMatchMaker();
+        singleton.matchSize = 4;
+        singleton.matchName = "name";
+    }
+
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
         Vector3 spawnPos = new Vector3(59.97f, 65f, 136f);
@@ -23,11 +30,20 @@ public class MyNetworkManager : NetworkManager {
 
     public void StartGame()
     {
-        NetworkManager.singleton.StartHost();
+        NetworkManager.singleton.matchMaker.CreateMatch(singleton.matchName, singleton.matchSize, true, "", singleton.OnMatchCreate);
+        //NetworkManager.singleton.StartHost();
     }
 
     public void JoinGame()
     {
-        NetworkManager.singleton.StartClient();
+        if (singleton.matches == null)
+        {
+            singleton.matchMaker.ListMatches(0, 20, "", singleton.OnMatchList);
+        }
+        else
+        {
+            singleton.matchMaker.JoinMatch(matches[0].networkId, "", singleton.OnMatchJoined);
+        }
+      //  NetworkManager.singleton.StartClient();
     }
 }
