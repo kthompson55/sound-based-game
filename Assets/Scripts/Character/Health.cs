@@ -44,7 +44,7 @@ public class Health : MonoBehaviour
         }
         if(currHealth <= 0)
         {
-            Application.LoadLevel(Application.loadedLevel);
+            Application.LoadLevel("MainMenu");
         }
     }
 	

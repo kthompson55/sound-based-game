@@ -26,7 +26,6 @@ public class TrapTrigger : MonoBehaviour
     void OnTriggerEnter(Collider col) {
         if (!triggered && col.gameObject.tag.ToLower() == "player")
         {
-            Debug.Log("Trap triggered!!");
             triggered = true;
             foreach (Animator anim in trapAnimators) {
                 anim.SetBool("triggered", triggered);

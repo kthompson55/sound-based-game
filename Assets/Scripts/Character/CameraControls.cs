@@ -21,7 +21,7 @@ public class CameraControls : MonoBehaviour
     {
         if (player == null)
         {
-            GameObject play = GameObject.Find("PhysicalBodyLocal(Clone)");
+            GameObject play = GameObject.Find("PhysicalBody_working(Clone)");
             if (play != null)
             {
                 player = play.transform;

@@ -12,6 +12,7 @@ public class SpiritCameraControls : MonoBehaviour {
 
     void Start()
     {
+        //player = GameObject.Find("");
         offset = new Vector3(0, cameraHeight, cameraDistance);
     }
     
@@ -19,7 +20,7 @@ public class SpiritCameraControls : MonoBehaviour {
     {
         if (player == null)
         {
-            GameObject play = GameObject.Find("PhysicalBodyLocal(Clone)");
+            GameObject play = GameObject.Find("SpiritualPlayer_1(Clone)");
             if (play != null)
             {
                 player = play.transform;
