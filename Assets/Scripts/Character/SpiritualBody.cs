@@ -5,11 +5,13 @@ public class SpiritualBody : MonoBehaviour
 {
     public float attackRange;
     public float speed;
+    public GameObject followingCamera;
+    public GameObject otherCamera;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
     private Vector3 position;
-    public PhysicalBody physicalBody;
+    public PhysicalBodyLocal physicalBody;
     public bool attacking;
 
     void Start()
@@ -19,6 +21,37 @@ public class SpiritualBody : MonoBehaviour
         
     void Update()
     {
+        #region Camera Fixes
+
+        if (followingCamera == null)
+        {
+            GameObject newCam = GameObject.Find("SpiritualCamera");
+            if (newCam != null)
+            {
+                followingCamera = newCam;
+            }
+        }
+        if (otherCamera == null)
+        {
+            GameObject newCam = GameObject.Find("PhysicalCamera");
+            if (newCam != null)
+            {
+                otherCamera = newCam;
+            }
+        }
+
+        if (physicalBody == null)
+        {
+            GameObject newBod = GameObject.Find("PhysicalBodyLocal(Clone)");
+            if (newBod != null)
+            {
+                physicalBody = newBod.GetComponent<PhysicalBodyLocal>();
+            }
+        }
+
+        followingCamera.SetActive(true);
+        otherCamera.SetActive(false);
+        #endregion
 
         UpdateIsAttacking();
         UpdateAttack();

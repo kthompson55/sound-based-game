@@ -37,7 +37,7 @@ public class EchoManager : MonoBehaviour {
     {
         Ray r = new Ray(where, Vector3.down);
         RaycastHit hit;
-        if(Physics.Raycast(r,out hit,Mathf.Infinity){
+        if(Physics.Raycast(r,out hit,Mathf.Infinity)){
             spawnAnEchoLocation(hit.point);
         }
     }
