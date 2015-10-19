@@ -21,10 +21,7 @@ public class SpiritualBody : MonoBehaviour
         
     void Update()
     {
-<<<<<<< HEAD
         #region Camera Fixes
-=======
->>>>>>> origin/Week2-Playtest
 
         if (followingCamera == null)
         {
@@ -54,13 +51,9 @@ public class SpiritualBody : MonoBehaviour
 
         followingCamera.SetActive(true);
         otherCamera.SetActive(false);
-<<<<<<< HEAD
         #endregion
 
         UpdateIsAttacking();
-=======
-
->>>>>>> origin/Week2-Playtest
         UpdateAttack();
     }
 
