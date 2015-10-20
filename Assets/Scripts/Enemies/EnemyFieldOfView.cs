@@ -24,7 +24,7 @@ public class EnemyFieldOfView : MonoBehaviour {
     void UpdatePlayerLastKnownPosition(Collider col)
     {
         if ( col.gameObject.CompareTag("Player") ){
-             Debug.Log("Enemy sees player!!");
+             //Debug.Log("Enemy sees player!!");
              attachedEnemy.ChasePlayer(col);
         }
     }

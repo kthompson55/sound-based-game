@@ -5,11 +5,13 @@ public class KillZone : MonoBehaviour {
 
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("Collide with object");
-        Health objectHealth = other.GetComponent<Health>();
-        if (objectHealth != null)
+        if (other.gameObject.CompareTag("Player"))
         {
-            objectHealth.currHealth = 0;
+            Health objectHealth = other.GetComponent<Health>();
+            if (objectHealth != null)
+            {
+                objectHealth.currHealth = 0;
+            }
         }
 
     }

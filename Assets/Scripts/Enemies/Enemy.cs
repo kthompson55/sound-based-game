@@ -20,10 +20,13 @@ public class Enemy : MonoBehaviour
     private int nextNodeIndex;
     private bool isChasing;
     private bool isWaiting;
+    public bool stopChasing;
+    private DateTime waitSoundTime;
 
     void Start() {
         nextNodeIndex = 0;
         waitStart = 0;
+        waitSoundTime = System.DateTime.Now;
         controller = GetComponent<CharacterController>();
         if (pathPoints.Length > 0) {
             Vector3 starting = pathPoints[nextNodeIndex].transform.position;
@@ -57,12 +60,14 @@ public class Enemy : MonoBehaviour
             path.y = 0;
             Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
             controller.Move(new Vector3(direction.x, yMovement, direction.z));
+
             if (ReachedOrOverShotTarget(path, targetPosition))
             {
                 isChasing = false;
                 isWaiting = true;
                 waitStart = System.DateTime.Now.Ticks * 10000;
             }
+            
         }
         //don't patrol if chasing
         else if (isPatrolling)  {
@@ -75,9 +80,13 @@ public class Enemy : MonoBehaviour
             }
         }
         
+        if(System.DateTime.Now.Subtract(waitSoundTime).Seconds>=10){
+            Debug.Log("Spawn");
+            waitSoundTime = System.DateTime.Now;
+            GameObject.Find("EchoManager").GetComponent<EchoManager>().spawnAnEchoLocation(gameObject.transform.position);
+        }
+
     }
-
-
 
     bool ReachedOrOverShotTarget(Vector3 path, Vector3 target){
         return ( 
@@ -94,14 +103,14 @@ public class Enemy : MonoBehaviour
 
     //shift change chase target to specific point
     void ChangeTarget(Vector3 targetPos) {
-        gameObject.transform.LookAt(targetPos);
+        gameObject.transform.LookAt(new Vector3(targetPos.x, gameObject.transform.position.y, targetPos.z));
         fromPosition = transform.position;
         targetPosition = targetPos;
     }
 
     public void ChasePlayer(Collider player) {
-        isChasing = true;
-        ChangeTarget(player.transform.position);
+            isChasing = true;
+            ChangeTarget(player.transform.position);
     }
 }
 
