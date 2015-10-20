@@ -4,17 +4,17 @@ using System.Collections;
 [RequireComponent(typeof(RectTransform))]
 public class HealthBar : MonoBehaviour
 {
-    //public GameObject player;
+    public GameObject player;
     private Health playerHealth;
 	private RectTransform rectTrans;
 	
 	public void Start ()
 	{
 		rectTrans = GetComponent<RectTransform> ();
-       
+        playerHealth = player.GetComponent<Health>();
 	}
 	
-	public void Update ()
+	public void LateUpdate ()
     {
         if (!playerHealth)
         {
