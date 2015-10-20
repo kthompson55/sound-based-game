@@ -1,0 +1,37 @@
+Camera collision stuff? Standard assets?
+----------------------------------------
+Having to manually rotate the camera sucks
+Camera feels confusing
+If the camera were closer to the player
+When I die, I can't start the game again
+After falling down, it can be difficult to see my player again, because of conflicingt walls.
+What is all this weird stuff on the floor? It looks like electricity
+Camera keeps getting lost.
+I'm not sure I'm going the right way
+I'm pretty sure I'm not supposed to go under the walls
+I don't get why I went from walking into a bright light and transporting to the main menu
+It doesn't feel like the exit felt like a natural progression
+Can't restart the game
+Top-down camera view? Default standard asset. FIND IT. (ProtectCameraFromWall, or something like that)
+Health bar didn't show up
+--------------------------
+I like the movement 
+The camera is really weird
+Jumping is way too strong, I hit the ceiling every time
+Mouse control for the camera
+I'm not really sure what my goal is
+Z-Fighting
+Which way did I go
+Everything is really shiny
+There's some really intense lighting (default textures suck)
+Where do I go from here?
+Jumping is really intense
+The height is okay, but it needs to be slower on the ascent and descent
+Tapping vs. holding space bar should have varying heights
+Really cool start
+----------------------------
+Final area, the player can float between two platforms
+Camera is annoying!! 
+Fun
+Traps don't hurt the player within the trap area
+
