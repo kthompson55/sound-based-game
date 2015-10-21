@@ -26,8 +26,6 @@ public class SpiritualBody : NetworkBehaviour
         #region Camera Fixes
         if (!isLocalPlayer) return;
 
-        if (!isLocalPlayer) return;
-
         if (EchoManage == null)
         {
             GameObject echo = GameObject.Find("EchoManager");
