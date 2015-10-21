@@ -34,4 +34,18 @@ Final area, the player can float between two platforms
 Camera is annoying!! 
 Fun
 Traps don't hurt the player within the trap area
-
+----------------------------
+Camera controls are difficult, make a follow camera. 
+There's no way to move the camera up and down or aim.
+Enemies signified that I was going in the right direction.
+The jump is really weird.  I'd expect a normal jump affected by gravity.
+It feels like I'm hitting an invisible ceiling.
+When the space bar is pressed I should hop and when it is held I should jump.
+----------------------------
+The Strafing speed should be a lot slower, and maybe have the backwards speed be slower as well.'
+Everyone dies on the first pitfall death because they can't see the trap.
+Enemies are too easy.
+The last room's lighting is extremely bright.
+When I jumped and hit a wall I stopped going up, when I expected to continue to reach my jump height.
+Holes in walls.
+Can hop up walls.
