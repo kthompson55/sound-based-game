@@ -12,6 +12,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public float speed;
     public float jumpHeight;
     public float jumpSpeed;
+    public float tapJumpTime;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
@@ -64,6 +65,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
                 Vector3 jumpForce = new Vector3(0, jumpHeight, 0);
                 jumpTracking = 0;
                 jumping = true;
+                StartCoroutine("VerifyFullJump");
             }
         }
         else if (jumping)
@@ -87,5 +89,11 @@ public class PhysicalBodyLocal : NetworkBehaviour
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
+    }
+
+    IEnumerator VerifyFullJump()
+    {
+        yield return new WaitForSeconds(tapJumpTime);
+        jumping = Input.GetButton("Jump");
     }
 }
