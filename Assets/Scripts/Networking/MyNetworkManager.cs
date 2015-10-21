@@ -14,6 +14,7 @@ public class MyNetworkManager : NetworkManager {
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
         Vector3 spawnPos = new Vector3(59.97f, 65f, 136f);
+        Debug.Log("Connection ID" + conn.connectionId);
 
         GameObject player;
         if (conn.connectionId < 0)
