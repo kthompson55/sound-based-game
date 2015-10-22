@@ -33,22 +33,20 @@ public class PhysicalBodyLocal : NetworkBehaviour
         #region Camera Fixes
         if (followingCamera == null)
         {
-            Debug.Log("No following physical");
             GameObject newCam = GameObject.Find("PhysicalCamera");
             if (newCam != null)
             {
-                Debug.Log("Found following physical");
                 followingCamera = newCam;
+                followingCamera.transform.parent = transform;
             }
         }
         if (otherCamera == null)
         {
-            //Debug.Log("No other physical");
             GameObject newCam = GameObject.Find("SpiritualCamera");
             if (newCam != null)
             {
-                Debug.Log("Found other physical");
                 otherCamera = newCam;
+                otherCamera.transform.parent = transform;
             }
         }
 
