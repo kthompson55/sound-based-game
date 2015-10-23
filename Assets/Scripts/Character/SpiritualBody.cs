@@ -143,7 +143,8 @@ public class SpiritualBody : NetworkBehaviour
     }
 
     void ReturnToBody() {
-        returning=!lerpToPosition(physicalBody.transform.position);
+        transform.position = physicalBody.transform.position;
+        //returning=!lerpToPosition(physicalBody.transform.position);
     }
 
     public void Attack(float angle) {
