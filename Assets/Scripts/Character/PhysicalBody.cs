@@ -12,6 +12,7 @@ public class PhysicalBody :  NetworkBehaviour
     public float speed;
     public float jumpHeight;
     public float jumpSpeed;
+    public float tapJumpTime;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
@@ -56,13 +57,14 @@ public class PhysicalBody :  NetworkBehaviour
 
 
         float yMovement = 0;
-        if(controller.isGrounded && !jumping)
+        if (controller.isGrounded && !jumping)
         {
-            if(Input.GetButton("Jump"))
+            if (Input.GetButton("Jump"))
             {
                 Vector3 jumpForce = new Vector3(0, jumpHeight, 0);
                 jumpTracking = 0;
                 jumping = true;
+                StartCoroutine("VerifyFullJump");
             }
         }
         else if(jumping)
