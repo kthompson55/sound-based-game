@@ -17,6 +17,11 @@ public class CameraControls : MonoBehaviour
         offset = new Vector3(0, cameraHeight, cameraDistance);
     }
 
+    void Update()
+    {
+        transform.rotation = Quaternion.identity;
+    }
+
     void LateUpdate()
     {
         if (player == null)
