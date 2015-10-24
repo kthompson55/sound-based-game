@@ -11,7 +11,6 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public float speed;
     public float jumpHeight;
     public float jumpSpeed;
-    public float tapJumpTime;
     public float jumpMovementModifier;
 
     private CharacterController controller;
@@ -19,6 +18,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     private bool jumping;
     private float jumpTracking;
     private Vector3 jumpingMovementDirection;
+    private float rotation;
 
     void Start()
     {
@@ -77,7 +77,6 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
                 jumpTracking = 0;
                 jumping = true;
                 jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
-                StartCoroutine("VerifyFullJump");
             }
         }
         else if (jumping)
@@ -85,7 +84,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
             float jumpShift = jumpSpeed * Time.deltaTime;
             jumpTracking += jumpShift;
             yMovement = jumpShift;
-            if (jumpTracking >= jumpHeight)
+            if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
             {
                 jumping = false;
             }
@@ -95,18 +94,14 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
             yMovement = Physics.gravity.y * Time.deltaTime;
         }
 
+        // adjust rotationMovement
+        rotation += Input.GetAxis("RotateCamera");
+
         // change rotation based on current camera angle
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, followingCamera.transform.eulerAngles.y, transform.localEulerAngles.z);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, rotation, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
-    }
-
-    // Is the jump button being tapped or held?
-    IEnumerator VerifyFullJump()
-    {
-        yield return new WaitForSeconds(tapJumpTime);
-        jumping = Input.GetButton("Jump");
     }
 }
