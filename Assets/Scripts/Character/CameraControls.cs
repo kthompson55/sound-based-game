@@ -30,14 +30,8 @@ public class CameraControls : MonoBehaviour
             if (play != null)
             {
                 player = play.transform;
+                transform.parent = player;
             }
         }
-
-        //if (Input.GetAxis("RotateCamera") != 0)
-        //{
-        //    offset = Quaternion.AngleAxis(Input.GetAxis("RotateCamera") * turnSpeed, Vector3.up) * offset;
-        //    transform.position = player.position + offset;
-        //    transform.LookAt(player.position);
-        //}
     }
 }

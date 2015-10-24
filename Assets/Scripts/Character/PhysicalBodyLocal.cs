@@ -14,6 +14,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public float jumpSpeed;
     public float tapJumpTime;
     public float jumpMovementModifier;
+    public float cameraSpeed;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
@@ -103,7 +104,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         }
 
         // adjust rotationMovement
-        rotation += Input.GetAxis("RotateCamera");
+        rotation += Input.GetAxis("RotateCamera") * cameraSpeed * Time.deltaTime;
 
         // change rotation based on current camera angle
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, rotation, transform.localEulerAngles.z);
