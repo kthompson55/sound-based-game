@@ -17,6 +17,11 @@ public class CameraControls : MonoBehaviour
         offset = new Vector3(0, cameraHeight, cameraDistance);
     }
 
+    void Update()
+    {
+        transform.rotation = Quaternion.identity;
+    }
+
     void LateUpdate()
     {
         if (player == null)
@@ -28,8 +33,11 @@ public class CameraControls : MonoBehaviour
             }
         }
 
-        offset = Quaternion.AngleAxis(Input.GetAxis("RotateCamera") * turnSpeed, Vector3.up) * offset;
-        transform.position = player.position + offset;
-        transform.LookAt(player.position);
+        //if (Input.GetAxis("RotateCamera") != 0)
+        //{
+        //    offset = Quaternion.AngleAxis(Input.GetAxis("RotateCamera") * turnSpeed, Vector3.up) * offset;
+        //    transform.position = player.position + offset;
+        //    transform.LookAt(player.position);
+        //}
     }
 }
