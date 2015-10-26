@@ -106,15 +106,15 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         {
             vRotation = posCameraBounds;
         }
-        else if(vRotation < -negCameraBounds)
+        else if(vRotation < negCameraBounds)
         {
-            vRotation = -negCameraBounds;
+            vRotation = negCameraBounds;
         }
 
         // change rotation based on current camera angle
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
-        followingCamera.transform.position = new Vector3(followingCamera.transform.position.x, vRotation, followingCamera.transform.position.z);
+        followingCamera.transform.position = new Vector3(followingCamera.transform.position.x, transform.position.y + vRotation, followingCamera.transform.position.z);
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
