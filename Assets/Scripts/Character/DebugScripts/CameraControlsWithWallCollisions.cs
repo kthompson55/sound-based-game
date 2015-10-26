@@ -29,7 +29,9 @@ public class CameraControlsWithWallCollisions : MonoBehaviour
     {
         if(target)
         {
-            Vector3 wantedPosition = target.TransformPoint(0, height, -distance);
+            //Vector3 wantedPosition = target.TransformPoint(0, height, -distance);
+            Vector3 wantedPosition = target.TransformPoint(0, 0, -distance);
+            wantedPosition = new Vector3(wantedPosition.x, transform.position.y, wantedPosition.z);
 
             // check to see if there is anything behind the target
             RaycastHit hit;
@@ -42,9 +44,10 @@ public class CameraControlsWithWallCollisions : MonoBehaviour
                 // clamp wanted position to hit position
                 wantedPosition.x = hit.point.x;
                 wantedPosition.z = hit.point.z;
-                wantedPosition.y = Mathf.Lerp(hit.point.y + bumperCameraHeight, wantedPosition.y, Time.deltaTime * damping);
+                //wantedPosition.y = Mathf.Lerp(hit.point.y + bumperCameraHeight, wantedPosition.y, Time.deltaTime * damping);
             }
-
+            Debug.Log("Wanted: " + wantedPosition);
+            Debug.Log("Current: " + transform.position);
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
 
             Vector3 lookPosition = target.TransformPoint(targetLookAtOffset);
@@ -72,6 +75,6 @@ public class CameraControlsWithWallCollisions : MonoBehaviour
                 transform.parent = target;
             }
         }
-        transform.LookAt(target);
+        transform.LookAt(target.position);
     }
 }

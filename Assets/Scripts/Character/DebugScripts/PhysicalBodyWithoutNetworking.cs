@@ -12,13 +12,18 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public float jumpHeight;
     public float jumpSpeed;
     public float jumpMovementModifier;
+    public float hCameraSpeed;
+    public float vCameraSpeed;
+    public float posCameraBounds;
+    public float negCameraBounds;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
     private bool jumping;
     private float jumpTracking;
     private Vector3 jumpingMovementDirection;
-    private float rotation;
+    private float hRotation;
+    private float vRotation;
 
     void Start()
     {
@@ -95,11 +100,21 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         }
 
         // adjust rotationMovement
-        rotation += Input.GetAxis("RotateCamera");
+        hRotation += Input.GetAxisRaw("RotateCameraHorizontal") * Time.deltaTime * hCameraSpeed;
+        vRotation += Input.GetAxisRaw("RotateCameraVertical") * Time.deltaTime * vCameraSpeed;
+        if(vRotation > posCameraBounds)
+        {
+            vRotation = posCameraBounds;
+        }
+        else if(vRotation < -negCameraBounds)
+        {
+            vRotation = -negCameraBounds;
+        }
 
         // change rotation based on current camera angle
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, rotation, transform.localEulerAngles.z);
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
+        followingCamera.transform.position = new Vector3(followingCamera.transform.position.x, vRotation, followingCamera.transform.position.z);
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
