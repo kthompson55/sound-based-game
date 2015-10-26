@@ -35,12 +35,22 @@ public class SpiritualBody : NetworkBehaviour
             }
         }
 
+        if (physicalBody == null)
+        {
+            GameObject newBod = GameObject.Find("PhysicalBody_working(Clone)");
+            if (newBod != null)
+            {
+                physicalBody = newBod.GetComponent<PhysicalBodyLocal>();
+            }
+        }
+
         if (followingCamera == null)
         {
             GameObject newSpiritCam = GameObject.Find("SpiritualCamera");
             if (newSpiritCam != null)
             {
                 followingCamera = newSpiritCam;
+                followingCamera.transform.parent = physicalBody.transform;
             }
         }
         if (otherCamera == null)
@@ -49,15 +59,7 @@ public class SpiritualBody : NetworkBehaviour
             if (newCam != null)
             {
                 otherCamera = newCam;
-            }
-        }
-
-        if (physicalBody == null)
-        {
-            GameObject newBod = GameObject.Find("PhysicalBody_working(Clone)");
-            if (newBod != null)
-            {
-                physicalBody = newBod.GetComponent<PhysicalBodyLocal>();
+                otherCamera.transform.parent = physicalBody.transform;
             }
         }
 
@@ -141,7 +143,8 @@ public class SpiritualBody : NetworkBehaviour
     }
 
     void ReturnToBody() {
-        returning=!lerpToPosition(physicalBody.transform.position);
+        transform.position = physicalBody.transform.position;
+        //returning=!lerpToPosition(physicalBody.transform.position);
     }
 
     public void Attack(float angle) {

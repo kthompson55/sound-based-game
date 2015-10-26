@@ -1,10 +1,11 @@
 using UnityEngine;
+using UnityEngine.Networking;
 using System;
 
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
-public class Enemy : MonoBehaviour
+public class Enemy : NetworkBehaviour
 {
     public GameObject[] pathPoints;
     public float speed;
@@ -42,8 +43,20 @@ public class Enemy : MonoBehaviour
         isWaiting = false;
     }
 
+    void OnTriggerEnter(Collider spirit)
+    {
+        if (spirit.GetComponent<SpiritualBody>() != null)
+        {
+            isWaiting = true;
+            Debug.Log("Enemy has been hit!");
+            waitStart = System.DateTime.Now.Ticks * 10000;
+        }
+    }
+
     void Update() 
     {
+        if (!isServer) return;
+
         //waiting after reaching chase location
         if (isWaiting) 
         {

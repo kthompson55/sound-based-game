@@ -38,22 +38,20 @@ public class PhysicalBodyLocal : NetworkBehaviour
         #region Camera Fixes
         if (followingCamera == null)
         {
-            Debug.Log("No following physical");
             GameObject newCam = GameObject.Find("PhysicalCamera");
             if (newCam != null)
             {
-                Debug.Log("Found following physical");
                 followingCamera = newCam;
+                followingCamera.transform.parent = transform;
             }
         }
         if (otherCamera == null)
         {
-            //Debug.Log("No other physical");
             GameObject newCam = GameObject.Find("SpiritualCamera");
             if (newCam != null)
             {
-                Debug.Log("Found other physical");
                 otherCamera = newCam;
+                otherCamera.transform.parent = transform;
             }
         }
 
@@ -109,6 +107,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         // change rotation based on current camera angle
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, rotation, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
+
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);

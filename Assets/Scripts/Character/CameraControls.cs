@@ -1,8 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
 [RequireComponent(typeof(Camera))]
-public class CameraControls : MonoBehaviour 
+public class CameraControls : NetworkBehaviour 
 {
     public float velocity;
     public float cameraDistance;

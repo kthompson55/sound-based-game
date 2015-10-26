@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
+using UnityEngine.Networking;
 using System.Collections;
 
-public class SpiritCameraControls : MonoBehaviour {
+public class SpiritCameraControls : NetworkBehaviour
+{
     public float velocity;
     public float cameraDistance;
     public float cameraHeight;
