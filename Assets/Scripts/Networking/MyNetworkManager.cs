@@ -2,7 +2,9 @@
 using UnityEngine.Networking;
 using System.Collections;
 
-public class MyNetworkManager : NetworkManager {
+public class MyNetworkManager : NetworkManager 
+{
+
 
     void Start()
     {
@@ -13,7 +15,7 @@ public class MyNetworkManager : NetworkManager {
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
-        Vector3 spawnPos = new Vector3(59.97f, 65f, 136f);
+        Vector3 spawnPos = new Vector3(5.54f, 1.77f, -5.49f);
         Debug.Log("Connection ID" + conn.connectionId);
 
         GameObject player;
