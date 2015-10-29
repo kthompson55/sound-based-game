@@ -39,6 +39,12 @@ public class PhysicalBodyLocal : NetworkBehaviour
         //Don't move other people plz.
         if (!isLocalPlayer) return;
 
+        if (Input.GetKeyDown(KeyCode.R))
+        {
+            Debug.Log("R presssed");
+            RpcLoadLevel("RPC called");
+        }
+
         #region Camera Fixes
         if (followingCamera == null)
         {
@@ -61,7 +67,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
 
         followingCamera.SetActive(true);
         otherCamera.SetActive(false);
-#endregion
+        #endregion
 
         float xMovement = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         float zMovement = Input.GetAxis("Vertical") * Time.deltaTime * speed;
@@ -124,5 +130,12 @@ public class PhysicalBodyLocal : NetworkBehaviour
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
+    }
+
+    [ClientRpc]
+    void RpcLoadLevel(string nextLevel)
+    {
+        Debug.Log(nextLevel);
+        
     }
 }
