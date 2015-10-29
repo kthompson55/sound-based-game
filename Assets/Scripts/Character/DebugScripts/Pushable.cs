@@ -5,6 +5,7 @@ using System.Collections;
 public class Pushable : MonoBehaviour {
     Vector3 pushDirection;
     float pushTime;
+    float pushSpeed = 0.5f;
     bool pushing = false;
 
     void Update()
@@ -12,11 +13,11 @@ public class Pushable : MonoBehaviour {
         if (pushing)
         {
             Debug.Log("Pushing is true");
-            pushing = false;
-            transform.position += pushDirection;
-            if ((System.DateTime.Now.Ticks * 10000) - pushTime > (50000 / 1000))
+            //transform.position = Vector3.Lerp(transform.position, transform.position + pushDirection, pushSpeed);
+            if (pushTime < System.DateTime.Now.Millisecond)
             {
                 Debug.Log("Stop moving");
+                pushing = false;
             }
         }
 
@@ -26,8 +27,13 @@ public class Pushable : MonoBehaviour {
         if (spirit.GetComponent<SpiritualBody>() != null)
         {
             Debug.Log("Pushing");
-            pushTime = System.DateTime.Now.Ticks * 10000;
+            pushTime = System.DateTime.Now.AddMilliseconds(1000).Millisecond;
             pushDirection = Vector3.Normalize(transform.position - spirit.transform.position);
+            pushDirection = new Vector3(pushDirection.x, 0, pushDirection.z);
+
+            Rigidbody r = GetComponent<Rigidbody>();
+            r.AddForce(pushDirection * 425);
+
             pushing = true;
         }
     }
