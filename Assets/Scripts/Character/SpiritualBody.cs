@@ -18,6 +18,7 @@ public class SpiritualBody : NetworkBehaviour
 
     void Start()
     {
+        GetComponent<BoxCollider>().isTrigger = false;
         attacking = false;
     }
         
@@ -127,6 +128,7 @@ public class SpiritualBody : NetworkBehaviour
             }
             else
             {
+                GetComponent<BoxCollider>().isTrigger = false;
                 attacking = false;
             }
         }
@@ -137,6 +139,7 @@ public class SpiritualBody : NetworkBehaviour
         }
         //if at body, enable attack input
         else {
+            GetComponent<BoxCollider>().isTrigger = false;
             attacking = false;
         }
 
@@ -153,6 +156,7 @@ public class SpiritualBody : NetworkBehaviour
             Vector2 displacementVector = GetDisplacementVector(angle);
             attackTarget = attackStart + new Vector3(displacementVector.x, 0, displacementVector.y);
             attacking = active = true;
+            GetComponent<BoxCollider>().isTrigger = true;
         }
     }
 
