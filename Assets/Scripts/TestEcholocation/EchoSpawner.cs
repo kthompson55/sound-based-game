@@ -23,6 +23,8 @@ public class EchoSpawner : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
+        currentRadius = 0.0f;
+        fade = 0.0f;
         echoMaterial.SetFloat("_DistanceFade", 1.0f);
         
 
@@ -36,8 +38,11 @@ public class EchoSpawner : MonoBehaviour {
         {
             currentRadius = 0.0f;
             fade = 0.0f;
-            listener.spotOpen(echolLocation);
-            Destroy(this.gameObject);
+            if (listener != null)
+            {
+                listener.spotOpen(echolLocation);
+                Destroy(this.gameObject);
+            }
         }
         else
         {

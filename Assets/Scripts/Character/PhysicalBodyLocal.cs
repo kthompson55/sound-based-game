@@ -24,6 +24,8 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public float sinkSpeed;
     public float swimUpSpeed;
 
+    private EchoManager em;
+
     private CharacterController controller;
     private Rigidbody rigidbody;
     private bool jumping;
@@ -163,6 +165,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
+
     }
 
     [ClientRpc]
