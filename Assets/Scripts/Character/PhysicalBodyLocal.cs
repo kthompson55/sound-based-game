@@ -18,6 +18,10 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public float vCameraSpeed;
     public float posCameraBounds;
     public float negCameraBounds;
+    public bool isSwimming;
+    public float swimSpeed;
+    public float sinkSpeed;
+    public float swimUpSpeed;
 
     private CharacterController controller;
     private Rigidbody rigidbody;

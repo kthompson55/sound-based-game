@@ -16,6 +16,10 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public float vCameraSpeed;
     public float posCameraBounds;
     public float negCameraBounds;
+    public bool isSwimming;
+    public float swimSpeed;
+    public float sinkSpeed;
+    public float swimUpSpeed;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
@@ -57,58 +61,66 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         otherCamera.SetActive(false);
         #endregion
 
+        float yMovement = 0;
         float xMovement = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         float zMovement = Input.GetAxis("Vertical") * Time.deltaTime * speed;
         Vector3 currentMovementNormal = new Vector3(xMovement, 0, zMovement).normalized;
-        // reduce movement speed if attempting to move in a direction different from your running direction prior to jumping
-        if (!controller.isGrounded)
-        {
-            Vector3 directionNormal = jumpingMovementDirection.normalized;
-            float totalDifferenceFromDirection = Mathf.Abs(currentMovementNormal.x - directionNormal.x) + Mathf.Abs(currentMovementNormal.z - directionNormal.z);
-            if (totalDifferenceFromDirection > .3f)
-            {
-                xMovement *= jumpMovementModifier;
-                zMovement *= jumpMovementModifier;
-            }
-        }
 
-        // handle upward and downward movements of jumping
-        float yMovement = 0;
-        if (controller.isGrounded && !jumping)
+        if(isSwimming)
         {
-            if (Input.GetButton("Jump"))
-            {
-                Vector3 jumpForce = new Vector3(0, jumpHeight, 0);
-                jumpTracking = 0;
-                jumping = true;
-                jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
-            }
-        }
-        else if (jumping)
-        {
-            float jumpShift = jumpSpeed * Time.deltaTime;
-            jumpTracking += jumpShift;
-            yMovement = jumpShift;
-            if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
-            {
-                jumping = false;
-            }
+
         }
         else
         {
-            yMovement = Physics.gravity.y * Time.deltaTime;
-        }
+            // reduce movement speed if attempting to move in a direction different from your running direction prior to jumping
+            if (!controller.isGrounded)
+            {
+                Vector3 directionNormal = jumpingMovementDirection.normalized;
+                float totalDifferenceFromDirection = Mathf.Abs(currentMovementNormal.x - directionNormal.x) + Mathf.Abs(currentMovementNormal.z - directionNormal.z);
+                if (totalDifferenceFromDirection > .3f)
+                {
+                    xMovement *= jumpMovementModifier;
+                    zMovement *= jumpMovementModifier;
+                }
+            }
 
-        // adjust rotationMovement
-        hRotation += Input.GetAxisRaw("RotateCameraHorizontal") * Time.deltaTime * hCameraSpeed;
-        vRotation += Input.GetAxisRaw("RotateCameraVertical") * Time.deltaTime * vCameraSpeed;
-        if(vRotation > posCameraBounds)
-        {
-            vRotation = posCameraBounds;
-        }
-        else if(vRotation < negCameraBounds)
-        {
-            vRotation = negCameraBounds;
+            // handle upward and downward movements of jumping
+            if (controller.isGrounded && !jumping)
+            {
+                if (Input.GetButton("Jump"))
+                {
+                    Vector3 jumpForce = new Vector3(0, jumpHeight, 0);
+                    jumpTracking = 0;
+                    jumping = true;
+                    jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
+                }
+            }
+            else if (jumping)
+            {
+                float jumpShift = jumpSpeed * Time.deltaTime;
+                jumpTracking += jumpShift;
+                yMovement = jumpShift;
+                if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
+                {
+                    jumping = false;
+                }
+            }
+            else
+            {
+                yMovement = Physics.gravity.y * Time.deltaTime;
+            }
+
+            // adjust rotationMovement
+            hRotation += Input.GetAxisRaw("RotateCameraHorizontal") * Time.deltaTime * hCameraSpeed;
+            vRotation += Input.GetAxisRaw("RotateCameraVertical") * Time.deltaTime * vCameraSpeed;
+            if (vRotation > posCameraBounds)
+            {
+                vRotation = posCameraBounds;
+            }
+            else if (vRotation < negCameraBounds)
+            {
+                vRotation = negCameraBounds;
+            }
         }
 
         // change rotation based on current camera angle
