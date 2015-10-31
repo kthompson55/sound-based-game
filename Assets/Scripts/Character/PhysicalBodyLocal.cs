@@ -20,7 +20,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public float posCameraBounds;
     public float negCameraBounds;
     public bool isSwimming;
-    public float swimSpeed;
+    public float swimMovementRate;
     public float sinkSpeed;
     public float swimUpSpeed;
 
@@ -74,9 +74,11 @@ public class PhysicalBodyLocal : NetworkBehaviour
         otherCamera.SetActive(false);
         #endregion
 
+        float yMovement = 0;
         float xMovement = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         float zMovement = Input.GetAxis("Vertical") * Time.deltaTime * speed;
         Vector3 currentMovementNormal = new Vector3(xMovement, 0, zMovement).normalized;
+
         // reduce movement speed if attempting to move in a direction different from your running direction prior to jumping
         if (!controller.isGrounded)
         {
@@ -90,7 +92,6 @@ public class PhysicalBodyLocal : NetworkBehaviour
         }
 
         // handle upward and downward movements of jumping
-        float yMovement = 0;
         if (controller.isGrounded && !jumping)
         {
             if (Input.GetButton("Jump"))
@@ -111,9 +112,27 @@ public class PhysicalBodyLocal : NetworkBehaviour
                 jumping = false;
             }
         }
+        else if (isSwimming && Input.GetButton("Jump"))
+        {
+            yMovement += swimUpSpeed * Time.deltaTime;
+        }
         else
         {
             yMovement = Physics.gravity.y * Time.deltaTime;
+        }
+
+        if (isSwimming)
+        {
+            xMovement *= swimMovementRate;
+            zMovement *= swimMovementRate;
+            if (yMovement > 0)
+            {
+                yMovement = Mathf.Sign(yMovement) * swimUpSpeed * Time.deltaTime;
+            }
+            else if (yMovement < 0)
+            {
+                yMovement = Mathf.Sign(yMovement) * sinkSpeed * Time.deltaTime;
+            }
         }
 
         // adjust rotationMovement
