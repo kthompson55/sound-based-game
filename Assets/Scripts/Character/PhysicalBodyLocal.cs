@@ -31,6 +31,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
     private Vector3 jumpingMovementDirection;
     private float hRotation;
     private float vRotation;
+    private bool leavingWater;
 
     void Start()
     {
@@ -79,59 +80,67 @@ public class PhysicalBodyLocal : NetworkBehaviour
         float zMovement = Input.GetAxis("Vertical") * Time.deltaTime * speed;
         Vector3 currentMovementNormal = new Vector3(xMovement, 0, zMovement).normalized;
 
-        // reduce movement speed if attempting to move in a direction different from your running direction prior to jumping
-        if (!controller.isGrounded)
-        {
-            Vector3 directionNormal = jumpingMovementDirection.normalized;
-            float totalDifferenceFromDirection = Mathf.Abs(currentMovementNormal.x - directionNormal.x) + Mathf.Abs(currentMovementNormal.z - directionNormal.z);
-            if (totalDifferenceFromDirection > .3f)
-            {
-                xMovement *= jumpMovementModifier;
-                zMovement *= jumpMovementModifier;
-            }
-        }
-
-        // handle upward and downward movements of jumping
-        if (controller.isGrounded && !jumping)
-        {
-            if (Input.GetButton("Jump"))
-            {
-                Vector3 jumpForce = new Vector3(0, jumpHeight, 0);
-                jumpTracking = 0;
-                jumping = true;
-                jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
-            }
-        }
-        else if (jumping)
-        {
-            float jumpShift = jumpSpeed * Time.deltaTime;
-            jumpTracking += jumpShift;
-            yMovement = jumpShift;
-            if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
-            {
-                jumping = false;
-            }
-        }
-        else if (isSwimming && Input.GetButton("Jump"))
-        {
-            yMovement += swimUpSpeed * Time.deltaTime;
-        }
-        else
-        {
-            yMovement = Physics.gravity.y * Time.deltaTime;
-        }
-
         if (isSwimming)
         {
             xMovement *= swimMovementRate;
             zMovement *= swimMovementRate;
-            if (yMovement > 0)
+            if (Input.GetButton("Jump"))
             {
-                yMovement = Mathf.Sign(yMovement) * swimUpSpeed * Time.deltaTime;
+                yMovement = swimUpSpeed * Time.deltaTime;
             }
-            else if (yMovement < 0)
+            else
             {
-                yMovement = Mathf.Sign(yMovement) * sinkSpeed * Time.deltaTime;
+                yMovement = -sinkSpeed * Time.deltaTime;
+            }
+        }
+        else if (leavingWater && Input.GetButton("Jump"))
+        {
+            if (controller.isGrounded)
+            {
+                leavingWater = false;
+            }
+            else
+            {
+                yMovement = 0;
+            }
+        }
+        else
+        {
+            // reduce movement speed if attempting to move in a direction different from your running direction prior to jumping
+            if (!controller.isGrounded)
+            {
+                Vector3 directionNormal = jumpingMovementDirection.normalized;
+                float totalDifferenceFromDirection = Mathf.Abs(currentMovementNormal.x - directionNormal.x) + Mathf.Abs(currentMovementNormal.z - directionNormal.z);
+                if (totalDifferenceFromDirection > .3f)
+                {
+                    xMovement *= jumpMovementModifier;
+                    zMovement *= jumpMovementModifier;
+                }
+            }
+
+            // handle upward and downward movements of jumping
+            if (controller.isGrounded && !jumping)
+            {
+                if (Input.GetButton("Jump"))
+                {
+                    jumpTracking = 0;
+                    jumping = true;
+                    jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
+                }
+            }
+            else if (jumping)
+            {
+                float jumpShift = jumpSpeed * Time.deltaTime;
+                jumpTracking += jumpShift;
+                yMovement = jumpShift;
+                if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
+                {
+                    jumping = false;
+                }
+            }
+            else
+            {
+                yMovement = Physics.gravity.y * Time.deltaTime;
             }
         }
 
@@ -172,6 +181,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public void StopSwimming()
     {
         isSwimming = false;
+        leavingWater = true;
         followingCamera.GetComponent<Blur>().enabled = false;
     }
 }
