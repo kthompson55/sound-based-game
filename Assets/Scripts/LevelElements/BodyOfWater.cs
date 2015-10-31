@@ -8,12 +8,12 @@ public class BodyOfWater : MonoBehaviour
         PhysicalBodyLocal physicalBody = col.GetComponent<PhysicalBodyLocal>();
         if (physicalBody)
         {
-            physicalBody.isSwimming = true;
+            physicalBody.StartSwimming();
         }
         PhysicalBodyWithoutNetworking nonNetwork = col.GetComponent<PhysicalBodyWithoutNetworking>();
         if(nonNetwork)
         {
-            nonNetwork.isSwimming = true;
+            nonNetwork.StartSwimming();
         }
     }
 
@@ -22,12 +22,12 @@ public class BodyOfWater : MonoBehaviour
         PhysicalBodyLocal physicalBody = col.GetComponent<PhysicalBodyLocal>();
         if (physicalBody)
         {
-            physicalBody.isSwimming = false;
+            physicalBody.StopSwimming();
         }
         PhysicalBodyWithoutNetworking nonNetwork = col.GetComponent<PhysicalBodyWithoutNetworking>();
         if (nonNetwork)
         {
-            nonNetwork.isSwimming = false;
+            nonNetwork.StopSwimming();
         }
     }
 }

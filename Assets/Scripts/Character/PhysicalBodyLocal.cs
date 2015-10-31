@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
+using UnityStandardAssets.ImageEffects;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
@@ -141,5 +142,17 @@ public class PhysicalBodyLocal : NetworkBehaviour
     {
         Debug.Log(nextLevel);
         
+    }
+
+    public void StartSwimming()
+    {
+        isSwimming = true;
+        followingCamera.GetComponent<Blur>().enabled = true;
+    }
+
+    public void StopSwimming()
+    {
+        isSwimming = false;
+        followingCamera.GetComponent<Blur>().enabled = false;
     }
 }
