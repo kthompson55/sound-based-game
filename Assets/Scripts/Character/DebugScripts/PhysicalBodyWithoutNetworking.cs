@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using UnityStandardAssets.ImageEffects;
 using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
@@ -16,6 +17,10 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public float vCameraSpeed;
     public float posCameraBounds;
     public float negCameraBounds;
+    public bool isSwimming;
+    public float swimMovementRate;
+    public float sinkSpeed;
+    public float swimUpSpeed;
 
     private CharacterController controller;
     private Rigidbody rigidbody;
@@ -57,9 +62,11 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         otherCamera.SetActive(false);
         #endregion
 
+        float yMovement = 0;
         float xMovement = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         float zMovement = Input.GetAxis("Vertical") * Time.deltaTime * speed;
         Vector3 currentMovementNormal = new Vector3(xMovement, 0, zMovement).normalized;
+
         // reduce movement speed if attempting to move in a direction different from your running direction prior to jumping
         if (!controller.isGrounded)
         {
@@ -73,7 +80,6 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         }
 
         // handle upward and downward movements of jumping
-        float yMovement = 0;
         if (controller.isGrounded && !jumping)
         {
             if (Input.GetButton("Jump"))
@@ -94,19 +100,37 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
                 jumping = false;
             }
         }
+        else if(isSwimming && Input.GetButton("Jump"))
+        {
+            yMovement += swimUpSpeed * Time.deltaTime;
+        }
         else
         {
             yMovement = Physics.gravity.y * Time.deltaTime;
         }
 
+        if(isSwimming)
+        {
+            xMovement *= swimMovementRate;
+            zMovement *= swimMovementRate;
+            if(yMovement > 0)
+            {
+                yMovement = Mathf.Sign(yMovement) * swimUpSpeed * Time.deltaTime;
+            }
+            else if(yMovement < 0)
+            {
+                yMovement = Mathf.Sign(yMovement) * sinkSpeed * Time.deltaTime;
+            }
+        }
+
         // adjust rotationMovement
         hRotation += Input.GetAxisRaw("RotateCameraHorizontal") * Time.deltaTime * hCameraSpeed;
         vRotation += Input.GetAxisRaw("RotateCameraVertical") * Time.deltaTime * vCameraSpeed;
-        if(vRotation > posCameraBounds)
+        if (vRotation > posCameraBounds)
         {
             vRotation = posCameraBounds;
         }
-        else if(vRotation < negCameraBounds)
+        else if (vRotation < negCameraBounds)
         {
             vRotation = negCameraBounds;
         }
@@ -118,5 +142,17 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
+    }
+
+    public void StartSwimming()
+    {
+        isSwimming = true;
+        followingCamera.GetComponent<Blur>().enabled = true;
+    }
+
+    public void StopSwimming()
+    {
+        isSwimming = false;
+        followingCamera.GetComponent<Blur>().enabled = false;
     }
 }

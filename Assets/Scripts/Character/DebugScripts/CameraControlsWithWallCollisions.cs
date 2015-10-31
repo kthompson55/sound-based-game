@@ -46,8 +46,6 @@ public class CameraControlsWithWallCollisions : MonoBehaviour
                 wantedPosition.z = hit.point.z;
                 //wantedPosition.y = Mathf.Lerp(hit.point.y + bumperCameraHeight, wantedPosition.y, Time.deltaTime * damping);
             }
-            Debug.Log("Wanted: " + wantedPosition);
-            Debug.Log("Current: " + transform.position);
             transform.position = Vector3.Lerp(transform.position, wantedPosition, Time.deltaTime * damping);
 
             Vector3 lookPosition = target.TransformPoint(targetLookAtOffset);
