@@ -115,12 +115,12 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
                     jumpTracking = 0;
                     jumping = true;
                     jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
-		    currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
+		            currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
                 }
             }
             else if (jumping)
             {
-                float jumpShift = jumpSpeed * Time.deltaTime;
+                float jumpShift = jumpSpeed * Time.deltaTime * (currJumpCap - transform.localPosition.y);
                 jumpTracking += jumpShift;
                 yMovement = jumpShift + Physics.gravity.y * Time.deltaTime;
                 if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
