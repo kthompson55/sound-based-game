@@ -1,8 +1,10 @@
-﻿using UnityEngine;
+using System;
+using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
 using System.Collections;
 using UnityStandardAssets.ImageEffects;
+
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
@@ -24,6 +26,9 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public float sinkSpeed;
     public float swimUpSpeed;
 
+    private EchoManager em;
+    private DateTime waitSoundTime;
+
     private CharacterController controller;
     private Rigidbody rigidbody;
     private bool jumping;
@@ -35,6 +40,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
 
     void Start()
     {
+        waitSoundTime = System.DateTime.Now;
         controller = GetComponent<CharacterController>();
         rigidbody = GetComponent<Rigidbody>();
         jumping = false;
@@ -42,6 +48,26 @@ public class PhysicalBodyLocal : NetworkBehaviour
 
     void Update()
     {
+        if (em == null)
+        {
+            em = GameObject.Find("EchoManager").GetComponent<EchoManager>();
+            waitSoundTime = System.DateTime.Now;
+            GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
+            temp.GetComponent<EchoSpawner>().echoSpeed = 1f;
+            temp.GetComponent<EchoSpawner>().maxRadius = 2;
+
+        }
+
+        if (System.DateTime.Now.Subtract(waitSoundTime).Seconds >= 1)
+        {
+            Debug.Log("Player spawned Echo");
+            waitSoundTime = System.DateTime.Now;
+            GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
+            temp.GetComponent<EchoSpawner>().echoSpeed = 1f;
+            temp.GetComponent<EchoSpawner>().maxRadius = 2;
+
+        }
+
         //Don't move other people plz.
         if (!isLocalPlayer) return;
 
@@ -163,6 +189,9 @@ public class PhysicalBodyLocal : NetworkBehaviour
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
+
+        
+
     }
 
     [ClientRpc]

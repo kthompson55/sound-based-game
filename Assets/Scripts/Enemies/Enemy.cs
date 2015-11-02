@@ -94,7 +94,6 @@ public class Enemy : NetworkBehaviour
         }
         
         if(System.DateTime.Now.Subtract(waitSoundTime).Seconds>=10){
-            Debug.Log("Spawn");
             waitSoundTime = System.DateTime.Now;
             EchoManager things = GameObject.Find("EchoManager").GetComponent<EchoManager>();
             GameObject.Find("EchoManager").GetComponent<EchoManager>().spawnAnEchoLocation(gameObject.transform.position);

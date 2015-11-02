@@ -29,7 +29,7 @@ public class SpiritCameraControls : NetworkBehaviour
             }
         }
 
-        offset = Quaternion.AngleAxis(Input.GetAxis("RotateCamera") * turnSpeed, Vector3.up) * offset;
+        offset = Quaternion.AngleAxis(Input.GetAxis("RotateCameraHorizontal") * turnSpeed, Vector3.up) * offset;
         transform.position = player.position + offset;
         transform.rotation = player.rotation * Quaternion.AngleAxis(90.0f, Vector3.right);
     }
