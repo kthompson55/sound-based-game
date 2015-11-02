@@ -1,15 +1,12 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class EndGoal : MonoBehaviour {
+public class EndGoal : MonoBehaviour 
+{
+    public string nextLevel;
 
     void OnTriggerEnter(Collider col)
     {
-        ChangeScene("MainMenu");
-    }
-
-
-    void ChangeScene(string toScene) {
-        Application.LoadLevel(toScene);
+        Application.LoadLevel(nextLevel);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections;
 
 public class BodyOfWater : MonoBehaviour 
 {
-    void OnTriggerEnter(Collider col)
+    void OnTriggerStay(Collider col)
     {
         PhysicalBodyLocal physicalBody = col.GetComponent<PhysicalBodyLocal>();
         if (physicalBody)
