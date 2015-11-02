@@ -19,7 +19,9 @@ public class HealthBar : MonoBehaviour
         if (!playerHealth)
         {
             //fix later
-            playerHealth = GameObject.Find("PhysicalBody_working(Clone)").GetComponent<Health>();
+            GameObject possibleHealth = GameObject.Find("PhysicalBody_working");
+            playerHealth = (possibleHealth != null) ? possibleHealth.GetComponent<Health>() : 
+                GameObject.Find("PhysicalBody_working(Clone)").GetComponent<Health>();
         }
         else {
             transform.localScale = new Vector3(playerHealth.GetHealthPercentage(), 1, 1);//.x = playerHealth.GetHealthPercentage();

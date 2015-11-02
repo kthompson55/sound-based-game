@@ -4,14 +4,14 @@ using System.Collections;
 public class TrapTrigger : MonoBehaviour
 {
     private bool triggered;
-    private long triggeredTime;
     public Trap[] attachedTraps;
     private Animator[] trapAnimators;
     public float cooldown;
+    public bool stuck;
+    float timer = 0;
 
     void Start() {
         triggered = false;
-
         trapAnimators = new Animator[attachedTraps.Length];
         for(int i = 0; i < attachedTraps.Length; i ++){
             trapAnimators[i] = attachedTraps[i].GetComponent<Animator>();
@@ -20,22 +20,52 @@ public class TrapTrigger : MonoBehaviour
                 Debug.LogError("No Trap Animator for this trap! Trap name: " + attachedTraps[i].name);
             }
         }
-        
     }
 
     void OnTriggerEnter(Collider col) {
-        if (!triggered && col.gameObject.tag.ToLower() == "player")
+        if (!triggered && IsPlayer(col))
         {
-            triggered = true;
-            foreach (Animator anim in trapAnimators) {
-                anim.SetBool("triggered", triggered);
-            }
-            triggeredTime = System.DateTime.Now.Ticks * 10000;
+            ActivateTrigger();
+        }else if(col.gameObject.tag.Equals("Block")){
+            Stuck();
+        }
+    }
+
+    void OnTriggerStay(Collider col)
+    {
+        if (IsPlayer(col))
+        {
+            ActivateTrigger();
+        }else if (!stuck & col.gameObject.tag.Equals("Block"))
+        {
+            Stuck();
+        }
+    }
+
+    void OnTriggerExit(Collider col)
+    {
+        if (!triggered && IsPlayer(col))
+        {
+            ResetTrigger();
+        }
+    }
+
+    private bool IsPlayer(Collider col) {
+        return col.gameObject.tag.ToLower() == "player";
+    }
+
+    private void ActivateTrigger() {
+        triggered = true;
+        foreach (Animator anim in trapAnimators)
+        {
+            anim.SetBool("triggered", triggered);
         }
     }
 
     public void ResetTrigger() {
         triggered = false;
+
+        timer = 0;
         foreach (Animator anim in trapAnimators)
         {
             anim.SetBool("triggered", triggered);
@@ -46,14 +76,18 @@ public class TrapTrigger : MonoBehaviour
         return triggered;
     }
 
-    public long GetTriggeredTime() {
-        return triggeredTime;
+    public void Stuck() {
+        foreach (Animator anim in trapAnimators)
+        {
+            anim.SetBool("stuck", true);
+        }
     }
-
+   
     void Update() {
         if (triggered) {
-            if ((System.DateTime.Now.Ticks * 10000) - triggeredTime > (cooldown / 1000)) {
-                triggered = false;
+            timer += Time.deltaTime;
+            if (timer > cooldown) {
+                ResetTrigger();
             }
         }
     }
