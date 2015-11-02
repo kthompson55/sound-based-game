@@ -22,15 +22,16 @@ public class EchoManager : MonoBehaviour {
         echoArray[whatSpot] = false;
     }
 
-    public void spawnAnEchoLocation(Vector3 where)
+    public GameObject spawnAnEchoLocation(Vector3 where)
     {
         (whatToSpawn.GetComponent<EchoSpawner>()).setEchoLocation(nextAvaibleSpot);
         echoArray[nextAvaibleSpot] = true;
-        var temp=Instantiate(whatToSpawn, where, new Quaternion());
+        Object temp = Instantiate(whatToSpawn, where, new Quaternion());
         ((GameObject)temp).GetComponent<EchoSpawner>().subscribeToDeath(this);
         ((GameObject)temp).GetComponent<EchoSpawner>().setEchoLocation(nextAvaibleSpot);
 
         getNextSpot();
+        return (GameObject)temp;
     }
 
     private void testCode(Vector3 where)
