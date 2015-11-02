@@ -4,7 +4,7 @@ using System.Collections;
 
 public class MyNetworkManager : NetworkManager 
 {
-
+    public Vector3 spawnPos;
 
     void Start()
     {
@@ -16,6 +16,10 @@ public class MyNetworkManager : NetworkManager
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
     {
         Vector3 spawnPos = new Vector3(5.54f, 1.77f, -5.49f);
+        GameObject temp=GameObject.Find("PhysicalCamera");
+        if(temp!=null){
+            spawnPos = temp.GetComponent<PysicalCameraScript>().pos;
+        }
         Debug.Log("Connection ID" + conn.connectionId);
 
         GameObject player;
