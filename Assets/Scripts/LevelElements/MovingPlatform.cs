@@ -10,20 +10,13 @@ public class MovingPlatform : MonoBehaviour
     public float speed = 0.25f;
     public float pauseDuration = 2f;
     public bool paused = false;
-    public bool ascending = false;
+    public bool startAtMin;
 
-    private float pauseStartTime;
     private float timer;
-    // Update is called once per frame
-    float movement;
+    private bool ascending;
+
     void Start() {
-        if (ascending)
-        {
-            movement = yMax - transform.localPosition.y;
-        }
-        else {
-            movement = transform.localPosition.y - yMin;
-        }
+        transform.localPosition = new Vector3(transform.localPosition.x, ((startAtMin) ? yMin : yMax), transform.localPosition.z);
     }
 
     void Update()
@@ -44,29 +37,23 @@ public class MovingPlatform : MonoBehaviour
             {
                 if (ascending)
                 {
-                    currY += movement * speed * Time.deltaTime;
+                    currY += speed * Time.deltaTime;
                     //Debug.Log("currY: " + currY + ", max: " + yMax);
                     if (yMax - currY < 1)
                     {
-                        pauseStartTime = System.DateTime.Now.Ticks * 10000;
-                        //currY = yMax;
                         paused = true;
                         ascending = false;
-                        movement = currY - yMin;
                     }
                 }
                 else
                 {
-                    currY -= movement * speed * Time.deltaTime;
+                    currY -= speed * Time.deltaTime;
                     //Debug.Log("currY: " + currY + ", min: " + yMin);
 
                     if (currY - yMin < 1)
                     {
-                        pauseStartTime = System.DateTime.Now.Ticks * 10000;
-                        //currY = yMin;
                         paused = true;
                         ascending = true;
-                        movement = yMax - currY;
                     }
                 }
                 transform.localPosition = new Vector3(transform.localPosition.x, currY, transform.localPosition.z);
