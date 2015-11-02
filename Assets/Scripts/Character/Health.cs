@@ -46,6 +46,7 @@ public class Health : MonoBehaviour
         {
             //fix
             Application.LoadLevel("MainMenu");
+            MyNetworkManager.singleton.ServerChangeScene("MainMenu");
         }
     }
 	
