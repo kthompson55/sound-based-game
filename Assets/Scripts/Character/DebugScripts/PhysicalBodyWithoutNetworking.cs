@@ -30,6 +30,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     private float hRotation;
     private float vRotation;
     private bool leavingWater;
+    private float currJumpCap = 0;
 
     void Start()
     {
@@ -114,13 +115,14 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
                     jumpTracking = 0;
                     jumping = true;
                     jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
+		    currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
                 }
             }
             else if (jumping)
             {
                 float jumpShift = jumpSpeed * Time.deltaTime;
                 jumpTracking += jumpShift;
-                yMovement = jumpShift;
+                yMovement = jumpShift + Physics.gravity.y * Time.deltaTime;
                 if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
                 {
                     jumping = false;
