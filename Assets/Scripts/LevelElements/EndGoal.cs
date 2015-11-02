@@ -7,6 +7,6 @@ public class EndGoal : MonoBehaviour
 
     void OnTriggerEnter(Collider col)
     {
-        Application.LoadLevel(nextLevel);
+        MyNetworkManager.singleton.ServerChangeScene(nextLevel);
     }
 }

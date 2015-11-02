@@ -44,7 +44,8 @@ public class Health : MonoBehaviour
         }
         if(currHealth <= 0)
         {
-            //fix
+            //fi
+            MyNetworkManager.singleton.StopHost();
             Application.LoadLevel("MainMenu");
         }
     }
