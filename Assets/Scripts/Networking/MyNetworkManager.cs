@@ -25,7 +25,8 @@ public class MyNetworkManager : NetworkManager
         GameObject player;
         if (conn.connectionId < 0)
         {
-            player = (GameObject)Instantiate(base.playerPrefab, spawnPos, Quaternion.identity);
+            //player = (GameObject)Instantiate(base.playerPrefab, spawnPos, Quaternion.identity);
+            player = (GameObject)Instantiate(spawnPrefabs[1], spawnPos, Quaternion.identity);
         }
         else
         {

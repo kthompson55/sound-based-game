@@ -38,6 +38,9 @@ public class EchoSpawner : MonoBehaviour {
         {
             currentRadius = 0.0f;
             fade = 0.0f;
+            echoMaterial.SetFloat("_Radius" + echolLocation, currentRadius);
+            echoMaterial.SetFloat("_Fade" + echolLocation, fade);
+
             if (listener != null)
             {
                 listener.spotOpen(echolLocation);
@@ -77,7 +80,7 @@ public class EchoSpawner : MonoBehaviour {
         echoMaterial.SetVector("_Position"+echolLocation, transform.position);
         echoMaterial.SetFloat("_Radius"+echolLocation, currentRadius);
         echoMaterial.SetFloat("_MaxRadius"+echolLocation, maxRadius);
-        echoMaterial.SetFloat("_Fade"+echolLocation, fade);
+        echoMaterial.SetFloat("_Fade" + echolLocation, fade);
         echoMaterial.SetFloat("_MaxFade", maxRadius/echoSpeed);
     }
 }

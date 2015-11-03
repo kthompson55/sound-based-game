@@ -55,6 +55,7 @@ public class SpiritualBody : NetworkBehaviour
                 followingCamera.transform.parent = physicalBody.transform;
             }
         }
+
         if (otherCamera == null)
         {
             GameObject newCam = GameObject.Find("PhysicalCamera");
@@ -119,11 +120,11 @@ public class SpiritualBody : NetworkBehaviour
         if (returning)
         {
             //Debug.Log("Returning");
-            GetComponent<MeshRenderer>().enabled = true;
             if ((position - physicalBody.transform.position).magnitude < 1)
             {
                 position = physicalBody.transform.position;
                 returning = false;
+                GetComponent<MeshRenderer>().enabled = false;
             }
         }
     }
