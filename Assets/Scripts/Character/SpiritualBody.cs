@@ -69,14 +69,22 @@ public class SpiritualBody : NetworkBehaviour
         otherCamera.SetActive(false);
         #endregion
 
+
+        //Debug.Log("TransformPosition: " + transform.position);
+        //Debug.Log("Physical Position: " + physicalBody.transform.position);
+
+        //Debug.Log("TransformPosition: " + transform.position);
+
         UpdateIsAttacking();
         UpdateAttack();
     }
 
     void UpdateIsAttacking()
     {
+        //Debug.Log("Is Attacking");
         if (Input.GetMouseButtonDown(1))
         {
+            //Debug.Log("Right click");
             Ray ray = ((Camera)followingCamera.GetComponent<Camera>()).ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -87,6 +95,7 @@ public class SpiritualBody : NetworkBehaviour
 
         if (!attacking&&!returning&&Input.GetMouseButtonDown(0))
         {
+            Debug.Log("Attacking");
             Ray ray = ((Camera)followingCamera.GetComponent<Camera>()).ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
@@ -109,7 +118,13 @@ public class SpiritualBody : NetworkBehaviour
 
         if (returning)
         {
+            //Debug.Log("Returning");
             GetComponent<MeshRenderer>().enabled = true;
+            if ((position - physicalBody.transform.position).magnitude < 1)
+            {
+                position = physicalBody.transform.position;
+                returning = false;
+            }
         }
     }
 
@@ -119,6 +134,9 @@ public class SpiritualBody : NetworkBehaviour
     Vector3 attackTarget;
     bool returning = false;
     void UpdateAttack() {
+
+        //Debug.Log("TransformPosition: " + transform.position);
+        //Debug.Log("Physical Position: " + physicalBody.transform.position);
 
         //attack input has been handled and should now be lerping
         if (attacking)
@@ -140,6 +158,7 @@ public class SpiritualBody : NetworkBehaviour
                 attacking = false;
             }
         }
+
         //if not at body return to body
         else if (transform.position != physicalBody.transform.position)
         {
@@ -157,6 +176,7 @@ public class SpiritualBody : NetworkBehaviour
 
     void ReturnToBody() {
         //transform.position = physicalBody.transform.position;
+        //Debug.Log("Returning to body");
         returning = !lerpToPosition(physicalBody.transform.position, 15);
     }
 
@@ -181,6 +201,7 @@ public class SpiritualBody : NetworkBehaviour
     }
 
     private bool lerpToPosition(Vector3 target, float mySpeed) {
+        //Debug.Log("My Speed: " + mySpeed);
         bool reachedTarget = false;
         Vector3 positionThisFrame = transform.position;
         Vector3 path = target - positionThisFrame;
@@ -191,6 +212,8 @@ public class SpiritualBody : NetworkBehaviour
             endMovePos = target;
             reachedTarget = true;
         }
+        //Debug.Log("Previous position: " + transform.position);
+        //Debug.Log("Next Position: " + endMovePos);
         transform.position = endMovePos;
         return reachedTarget;
     }

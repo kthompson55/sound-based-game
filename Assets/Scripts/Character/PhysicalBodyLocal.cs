@@ -198,7 +198,6 @@ public class PhysicalBodyLocal : NetworkBehaviour
     void RpcLoadLevel(string nextLevel)
     {
         Debug.Log(nextLevel);
-        
     }
 
     public void StartSwimming()
