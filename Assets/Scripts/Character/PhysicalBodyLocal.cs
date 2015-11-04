@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Networking;
@@ -37,6 +37,9 @@ public class PhysicalBodyLocal : NetworkBehaviour
     private float hRotation;
     private float vRotation;
     private bool leavingWater;
+    private float currJumpCap;
+    private float jumpLockTimer;
+    public float jumpLockDuration = 0.1f;
 
     void Start()
     {
@@ -44,8 +47,11 @@ public class PhysicalBodyLocal : NetworkBehaviour
         controller = GetComponent<CharacterController>();
         rigidbody = GetComponent<Rigidbody>();
         jumping = false;
+        currJumpCap = gameObject.transform.localPosition.y + jumpHeight;
     }
 
+
+    private bool jumpLocked = false;
     void Update()
     {
         if (em == null)
@@ -143,30 +149,43 @@ public class PhysicalBodyLocal : NetworkBehaviour
                     zMovement *= jumpMovementModifier;
                 }
             }
+            else {
+                jumpLockTimer += Time.deltaTime;
+                if (jumpLockTimer > jumpLockDuration) {
+                    jumpLockTimer = 0;
+                    jumpLocked = false;
+                }
+            }
 
             // handle upward and downward movements of jumping
-            if (controller.isGrounded && !jumping)
+            if (controller.isGrounded && !jumpLocked)
             {
                 if (Input.GetButton("Jump"))
                 {
                     jumpTracking = 0;
                     jumping = true;
+                    jumpLocked = true;
                     jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
+                    currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
                 }
             }
+            
             else if (jumping)
             {
-                float jumpShift = jumpSpeed * Time.deltaTime;
+                //on button tap, only initiate tap jump
+                    //on button press initiate full jump
+                //long jump if jump is still down after jump tap height
+                float jumpShift = jumpSpeed * Time.deltaTime * (currJumpCap - transform.localPosition.y);
                 jumpTracking += jumpShift;
-                yMovement = jumpShift;
-                if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
+                yMovement = jumpShift + Physics.gravity.y * Time.deltaTime;
+                if (jumpTracking >= jumpHeight)
                 {
                     jumping = false;
                 }
             }
             else
             {
-                yMovement = Physics.gravity.y * Time.deltaTime;
+                yMovement = Physics.gravity.y * Time.deltaTime * Mathf.Clamp((currJumpCap - transform.localPosition.y), 0f, 1.5f);
             }
         }
 
@@ -189,8 +208,6 @@ public class PhysicalBodyLocal : NetworkBehaviour
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
-
-        
 
     }
 
