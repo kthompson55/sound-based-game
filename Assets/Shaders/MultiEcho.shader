@@ -56,6 +56,56 @@
 		_MaxRadius9("Max Radius9",float) = 0.0
 		_Fade9("Echo Fade9",float) = 0.0
 
+		_Position10("Position10",Vector) = (0.0,0.0,0.0)
+		_Radius10("Radius10",float) = 0.0
+		_MaxRadius10("Max Radius10",float) = 0.0
+		_Fade10("Echo Fade10",float) = 0.0
+
+		_Position11("Position11",Vector) = (0.0,0.0,0.0)
+		_Radius11("Radius11",float) = 0.0
+		_MaxRadius11("Max Radius11",float) = 0.0
+		_Fade11("Echo Fade11",float) = 0.0
+
+		_Position12("Position12",Vector) = (0.0,0.0,0.0)
+		_Radius12("Radius12",float) = 0.0
+		_MaxRadius12("Max Radius12",float) = 0.0
+		_Fade12("Echo Fade12",float) = 0.0
+
+		_Position13("Position13",Vector) = (0.0,0.0,0.0)
+		_Radius13("Radius13",float) = 0.0
+		_MaxRadius13("Max Radius13",float) = 0.0
+		_Fade13("Echo Fade13",float) = 0.0
+
+		_Position14("Position14",Vector) = (0.0,0.0,0.0)
+		_Radius14("Radius14",float) = 0.0
+		_MaxRadius14("Max Radius14",float) = 0.0
+		_Fade14("Echo Fade14",float) = 0.0
+
+		_Position15("Position15",Vector) = (0.0,0.0,0.0)
+		_Radius15("Radius15",float) = 0.0
+		_MaxRadius15("Max Radius15",float) = 0.0
+		_Fade15("Echo Fade15",float) = 0.0
+
+		_Position16("Position16",Vector) = (0.0,0.0,0.0)
+		_Radius16("Radius16",float) = 0.0
+		_MaxRadius16("Max Radius16",float) = 0.0
+		_Fade16("Echo Fade16",float) = 0.0
+
+		_Position17("Position17",Vector) = (0.0,0.0,0.0)
+		_Radius17("Radius17",float) = 0.0
+		_MaxRadius17("Max Radius17",float) = 0.0
+		_Fade17("Echo Fade17",float) = 0.0
+
+		_Position18("Position18",Vector) = (0.0,0.0,0.0)
+		_Radius18("Radius18",float) = 0.0
+		_MaxRadius18("Max Radius18",float) = 0.0
+		_Fade18("Echo Fade18",float) = 0.0
+
+		_Position19("Position19",Vector) = (0.0,0.0,0.0)
+		_Radius19("Radius19",float) = 0.0
+		_MaxRadius19("Max Radius19",float) = 0.0
+		_Fade19("Echo Fade19",float) = 0.0
+
 	} 
 	SubShader {
 		Tags { "RenderType"="Opaque" }
@@ -128,6 +178,56 @@
 		float  _Radius9;
 		float  _MaxRadius9;
 		float  _Fade9;
+
+		float3 _Position10;
+		float  _Radius10;
+		float  _MaxRadius10;
+		float  _Fade10;
+
+		float3 _Position11;
+		float  _Radius11;
+		float  _MaxRadius11;
+		float  _Fade11;
+
+		float3 _Position12;
+		float  _Radius12;
+		float  _MaxRadius12;
+		float  _Fade12;
+
+		float3 _Position13;
+		float  _Radius13;
+		float  _MaxRadius13;
+		float  _Fade13;
+
+		float3 _Position14;
+		float  _Radius14;
+		float  _MaxRadius14;
+		float  _Fade14;
+
+		float3 _Position15;
+		float  _Radius15;
+		float  _MaxRadius15;
+		float  _Fade15;
+
+		float3 _Position16;
+		float  _Radius16;
+		float  _MaxRadius16;
+		float  _Fade16;
+
+		float3 _Position17;
+		float  _Radius17;
+		float  _MaxRadius17;
+		float  _Fade17;
+
+		float3 _Position18;
+		float  _Radius18;
+		float  _MaxRadius18;
+		float  _Fade18;
+
+		float3 _Position19;
+		float  _Radius19;
+		float  _MaxRadius19;
+		float  _Fade19;
 		
 		// Custom light model that ignores actual lighting. 
 		half4 LightingNoLighting (SurfaceOutput s, half3 lightDir, half atten) {
@@ -168,6 +268,16 @@
 				c1 +=ApplyFade(IN, _Position7,_Radius7,_Fade7,_MaxRadius7);
 				c1 +=ApplyFade(IN, _Position8,_Radius8,_Fade8,_MaxRadius8);
 				c1 +=ApplyFade(IN, _Position9,_Radius9,_Fade9,_MaxRadius9);
+				c1 +=ApplyFade(IN, _Position10,_Radius10,_Fade10,_MaxRadius10);
+				c1 +=ApplyFade(IN, _Position11,_Radius11,_Fade11,_MaxRadius11);
+				c1 +=ApplyFade(IN, _Position12,_Radius12,_Fade12,_MaxRadius12);
+				c1 +=ApplyFade(IN, _Position13,_Radius13,_Fade13,_MaxRadius13);
+				c1 +=ApplyFade(IN, _Position14,_Radius14,_Fade14,_MaxRadius14);
+				c1 +=ApplyFade(IN, _Position15,_Radius15,_Fade15,_MaxRadius15);
+				c1 +=ApplyFade(IN, _Position16,_Radius16,_Fade16,_MaxRadius16);
+				c1 +=ApplyFade(IN, _Position17,_Radius17,_Fade17,_MaxRadius17);
+				c1 +=ApplyFade(IN, _Position18,_Radius18,_Fade18,_MaxRadius18);
+				c1 +=ApplyFade(IN, _Position19,_Radius19,_Fade19,_MaxRadius19);
 			
 			
 			//makes all echoes lighter

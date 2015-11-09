@@ -38,11 +38,11 @@ public class MyNetworkManager : NetworkManager
 
     public void StartGame()
     {
-        NetworkManager.singleton.matchMaker.CreateMatch(singleton.matchName, singleton.matchSize, true, "", singleton.OnMatchCreate);
+        MyNetworkManager.singleton.matchMaker.CreateMatch(matchName, matchSize, true, "", OnMatchCreate);
         //NetworkManager.singleton.StartHost();
     }
 
-    public void JoinGame()
+    public void JoinGame(int location)
     {
         if (singleton.matches == null)
         {
@@ -50,8 +50,13 @@ public class MyNetworkManager : NetworkManager
         }
         else
         {
-            singleton.matchMaker.JoinMatch(matches[0].networkId, "", singleton.OnMatchJoined);
+            singleton.matchMaker.JoinMatch(matches[location].networkId, "", singleton.OnMatchJoined);
         }
       //  NetworkManager.singleton.StartClient();
+    }
+
+    public bool AreMatches()
+    {
+        return MyNetworkManager.singleton.matches != null;
     }
 }
