@@ -7,7 +7,7 @@ public class EchoManager : MonoBehaviour {
 
     private bool stop = false;
 
-    private static int MAX_NUMBER_OF_ECHOS = 10;
+    private static int MAX_NUMBER_OF_ECHOS = 20;
 
     private bool[] echoArray = new bool[MAX_NUMBER_OF_ECHOS];
 
