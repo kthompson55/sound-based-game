@@ -185,7 +185,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
             }
             else
             {
-                yMovement = Physics.gravity.y * Time.deltaTime * Mathf.Clamp((currJumpCap - transform.localPosition.y), 0f, 1.5f);
+                yMovement = Physics.gravity.y * Time.deltaTime *Mathf.Clamp((currJumpCap - transform.localPosition.y), 0f, 1.0f);
             }
         }
 
