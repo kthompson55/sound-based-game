@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEngine.Networking;
 using System;
 
-
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
 public class Enemy : NetworkBehaviour
@@ -14,13 +13,13 @@ public class Enemy : NetworkBehaviour
     public float waitDuration;
 
     private CharacterController controller;
-    private Vector3 fromPosition;
-    private Vector3 targetPosition;
+    public Vector3 fromPosition;
+    public Vector3 targetPosition;
     private float yMovement = 0;
     private float waitStart;
     private int nextNodeIndex;
-    private bool isChasing;
-    private bool isWaiting;
+    public bool isChasing;
+    public bool isWaiting;
     public bool stopChasing;
     private DateTime waitSoundTime;
 
@@ -49,7 +48,7 @@ public class Enemy : NetworkBehaviour
         {
             isWaiting = true;
             Debug.Log("Enemy has been hit!");
-            waitStart = System.DateTime.Now.Ticks * 10000;
+            waitStart = System.DateTime.Now.Second;// *10000;
         }
     }
 
@@ -57,11 +56,25 @@ public class Enemy : NetworkBehaviour
     {
         if (!isServer) return;
 
+        //Debug.Log("Waiting: " + isWaiting);
+        //Debug.Log("Chasing: " + isChasing);
+
         //waiting after reaching chase location
+        Debug.Log("Is waiting: " + isWaiting);
+        Debug.Log("Is chasing: " + isChasing);
+        Debug.Log("is Patrolling: " + isPatrolling);
         if (isWaiting) 
         {
-            if ((System.DateTime.Now.Ticks * 10000) - waitStart > (waitDuration / 1000))
+            //Debug.Log("Waiting");
+            //if ((System.DateTime.Now.Ticks * 10000) - waitStart > (waitDuration / 1000))
+            //Debug.Log("time waited: " + ((System.DateTime.Now.Second) - waitStart));
+            //Debug.Log("time to wait: " + waitDuration);
+            //Debug.Log(Time.deltaTime);
+            waitStart += Time.deltaTime;
+            //Debug.Log("Wait start: " + waitStart);
+            if (waitStart > waitDuration)//((System.DateTime.Now.Second) - waitStart) > (waitDuration))
             {
+                Debug.Log("Waiting time is up");
                 isWaiting = false;
                 if(pathPoints.Length > 0)
                     ChangeTarget(pathPoints[nextNodeIndex].transform.position);
@@ -69,21 +82,29 @@ public class Enemy : NetworkBehaviour
         } 
         else if (isChasing) 
         {
+            Debug.Log("Chasing");
             Vector3 path = targetPosition - fromPosition;
             path.y = 0;
             Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
-            controller.Move(new Vector3(direction.x, yMovement, direction.z));
+
+            //Debug.Log("from Position: " + fromPosition);
+            //Debug.Log("Target Position: " + targetPosition);
+            //transform.position = Vector3.Lerp(fromPosition, targetPosition, 0.5f * Time.deltaTime);
+            //controller.Move(new Vector3(direction.x, direction.y, direction.z));
+            controller.Move(direction);
 
             if (ReachedOrOverShotTarget(path, targetPosition))
             {
+                Debug.Log("Reached or overshot target");
                 isChasing = false;
                 isWaiting = true;
-                waitStart = System.DateTime.Now.Ticks * 10000;
+                waitStart = 0;// System.DateTime.Now.Second;// .Ticks * 10000;
             }
-            
         }
+
         //don't patrol if chasing
         else if (isPatrolling)  {
+            Debug.Log("Patrolling");
             Vector3 path = targetPosition - fromPosition;
             path.y = 0;
             Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
@@ -98,10 +119,13 @@ public class Enemy : NetworkBehaviour
             EchoManager things = GameObject.Find("EchoManager").GetComponent<EchoManager>();
             GameObject.Find("EchoManager").GetComponent<EchoManager>().spawnAnEchoLocation(gameObject.transform.position);
         }
-
     }
 
     bool ReachedOrOverShotTarget(Vector3 path, Vector3 target){
+        //Debug.Log("Path: " + path);
+        //Debug.Log("Target: " + target);
+        //Debug.Log("Path mag: " + Vector3.Magnitude(path));
+        //Debug.Log("Mix mag: " + Vector3.Magnitude(fromPosition - transform.position));
         return ( 
             (transform.position.z == target.z && transform.position.x == target.x)
             || Vector3.Magnitude(fromPosition - transform.position) > Vector3.Magnitude(path));
@@ -122,8 +146,12 @@ public class Enemy : NetworkBehaviour
     }
 
     public void ChasePlayer(Collider player) {
+        if (!isWaiting)
+        {
+            Debug.Log("Chase player!");
             isChasing = true;
             ChangeTarget(player.transform.position);
+        }
     }
 }
 
