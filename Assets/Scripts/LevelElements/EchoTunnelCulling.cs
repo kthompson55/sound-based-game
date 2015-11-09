@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
@@ -12,20 +13,20 @@ public class EchoTunnelCulling : MonoBehaviour
 	void Awake() 
     {
         mesh = GetComponent<MeshFilter>().mesh;
-        float yLimit = transform.position.y;
-        Vector3[] vertices = new Vector3[mesh.vertexCount];
-        for (int i = 0; i < mesh.vertexCount; i++)
+        float yLimit = transform.localPosition.y;
+        List<int> newTriangles = new List<int>();
+
+        for(int i = 0; i < mesh.triangles.Length; i += 3)
         {
-            if(mesh.vertices[i].y > 0)
+            Vector3 currentVector = transform.rotation * mesh.vertices[mesh.triangles[i]];
+            if(currentVector.y < yLimit)
             {
-                Vector3 vertex = mesh.vertices[i];
-                vertices[i] = new Vector3(vertex.x, -vertex.y, vertex.z);
-            }
-            else
-            {
-                vertices[i] = mesh.vertices[i];
+                newTriangles.Add(mesh.triangles[i]);
+                newTriangles.Add(mesh.triangles[i + 1]);
+                newTriangles.Add(mesh.triangles[i + 2]);
             }
         }
-        mesh.vertices = vertices;
+
+        mesh.triangles = newTriangles.ToArray();
 	}
 }
