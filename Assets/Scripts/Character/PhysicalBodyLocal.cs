@@ -5,7 +5,6 @@ using UnityEngine.Networking;
 using System.Collections;
 using UnityStandardAssets.ImageEffects;
 
-
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
 public class PhysicalBodyLocal : NetworkBehaviour
@@ -13,9 +12,9 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public GameObject followingCamera;
     public GameObject otherCamera;
     public float speed;
+    public float runModifier;
     public float jumpHeight;
     public float jumpSpeed;
-    public float tapJumpTime;
     public float jumpMovementModifier;
     public float hCameraSpeed;
     public float vCameraSpeed;
@@ -61,12 +60,10 @@ public class PhysicalBodyLocal : NetworkBehaviour
             GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
             temp.GetComponent<EchoSpawner>().echoSpeed = 1f;
             temp.GetComponent<EchoSpawner>().maxRadius = 2;
-
         }
 
         if (System.DateTime.Now.Subtract(waitSoundTime).Seconds >= 1)
         {
-            Debug.Log("Player spawned Echo");
             waitSoundTime = System.DateTime.Now;
             GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
             temp.GetComponent<EchoSpawner>().echoSpeed = 1f;
@@ -149,9 +146,11 @@ public class PhysicalBodyLocal : NetworkBehaviour
                     zMovement *= jumpMovementModifier;
                 }
             }
-            else {
+            else 
+            {
                 jumpLockTimer += Time.deltaTime;
-                if (jumpLockTimer > jumpLockDuration) {
+                if (jumpLockTimer > jumpLockDuration) 
+                {
                     jumpLockTimer = 0;
                     jumpLocked = false;
                 }
@@ -169,12 +168,8 @@ public class PhysicalBodyLocal : NetworkBehaviour
                     currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
                 }
             }
-            
             else if (jumping)
             {
-                //on button tap, only initiate tap jump
-                    //on button press initiate full jump
-                //long jump if jump is still down after jump tap height
                 float jumpShift = jumpSpeed * Time.deltaTime * (currJumpCap - transform.localPosition.y);
                 jumpTracking += jumpShift;
                 yMovement = jumpShift + Physics.gravity.y * Time.deltaTime;
@@ -185,7 +180,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
             }
             else
             {
-                yMovement = Physics.gravity.y * Time.deltaTime *Mathf.Clamp((currJumpCap - transform.localPosition.y), 0f, 1.0f);
+                yMovement = Physics.gravity.y * Time.deltaTime * Mathf.Clamp((currJumpCap - transform.localPosition.y), 0f, 1.0f);
             }
         }
 
@@ -205,7 +200,13 @@ public class PhysicalBodyLocal : NetworkBehaviour
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
         followingCamera.transform.position = new Vector3(followingCamera.transform.position.x, transform.position.y + vRotation, followingCamera.transform.position.z);
+
         // apply movement
+        if(Input.GetButton("Sprint") && controller.isGrounded)
+        {
+            xMovement *= runModifier;
+            zMovement *= runModifier;
+        }
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
 
