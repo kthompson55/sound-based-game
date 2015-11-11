@@ -4,14 +4,12 @@ using System.Collections;
 [RequireComponent(typeof(RectTransform))]
 public class HealthBar : MonoBehaviour
 {
-    //public GameObject player;
     private Health playerHealth;
 	private RectTransform rectTrans;
 	
 	public void Start ()
 	{
 		rectTrans = GetComponent<RectTransform> ();
-       
 	}
 	
 	public void Update ()
@@ -20,10 +18,16 @@ public class HealthBar : MonoBehaviour
         {
             //fix later
             GameObject possibleHealth = GameObject.Find("PhysicalBody_working");
+            // DEBUG scenes
+            if(!possibleHealth)
+            {
+                possibleHealth = GameObject.Find("DebugPhysicalCharacter");
+            }
             playerHealth = (possibleHealth != null) ? possibleHealth.GetComponent<Health>() : 
                 GameObject.Find("PhysicalBody_working(Clone)").GetComponent<Health>();
         }
-        else {
+        else 
+        {
             transform.localScale = new Vector3(playerHealth.GetHealthPercentage(), 1, 1);//.x = playerHealth.GetHealthPercentage();
         }
 	}
