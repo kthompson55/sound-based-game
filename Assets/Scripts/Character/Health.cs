@@ -44,6 +44,7 @@ public class Health : MonoBehaviour
 
     void Update()
     {
+        Debug.Log(damageFlashImage.name);
         // check if invincible
         if (hit)
         {
