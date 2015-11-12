@@ -10,7 +10,8 @@ public class EchoSpawner : MonoBehaviour {
 
     public float fadeDelay = 0.0f;			
     public float fadeRate = 1.0f;			
-    public float echoSpeed = 9.0f;			
+    public float echoSpeed = 9.0f;
+    public Color echoColor = Color.white;
 
     private float dt = 0.0f;
 
@@ -76,11 +77,11 @@ public class EchoSpawner : MonoBehaviour {
         {
             fade += Time.deltaTime * fadeRate;
         }
-
         echoMaterial.SetVector("_Position"+echolLocation, transform.position);
         echoMaterial.SetFloat("_Radius"+echolLocation, currentRadius);
         echoMaterial.SetFloat("_MaxRadius"+echolLocation, maxRadius);
         echoMaterial.SetFloat("_Fade" + echolLocation, fade);
         echoMaterial.SetFloat("_MaxFade", maxRadius/echoSpeed);
+        echoMaterial.SetColor("_MainColor" + echolLocation, echoColor);
     }
 }
