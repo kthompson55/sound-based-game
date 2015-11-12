@@ -32,7 +32,7 @@ public class ControllerEnabledMenu : MonoBehaviour
 	// Update is called once per frame
 	void Update () 
     {
-        float direction = Input.GetAxis("Vertical");
+        float direction = Input.GetButtonDown("Vertical") ? Input.GetAxis("Vertical") : 0;
         menuButtons[currentButtonIndex].GetComponentInChildren<Text>().color = unselectedButtonTextColor;
         // move up in menu
         if(direction > 0 && currentButtonIndex > 0)
@@ -45,5 +45,11 @@ public class ControllerEnabledMenu : MonoBehaviour
             currentButtonIndex++;
         }
         menuButtons[currentButtonIndex].GetComponentInChildren<Text>().color = selectedButtonTextColor;
+
+        // check if pressed
+        if (Input.GetButtonDown("Submit"))
+        {
+            menuButtons[currentButtonIndex].onClick.Invoke();
+        }
 	}
 }
