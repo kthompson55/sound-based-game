@@ -72,7 +72,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
             GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
             temp.GetComponent<EchoSpawner>().echoSpeed = 1f;
             temp.GetComponent<EchoSpawner>().maxRadius = 2;
-
+            temp.GetComponent<EchoSpawner>().echoColor = Color.green;
         }
 
         //Don't move other people plz.
