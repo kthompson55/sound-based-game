@@ -13,6 +13,7 @@ public class LobbyManger : MonoBehaviour {
 	    
 	}
 
+    //JoinButton calls this, goes to Networkmanager
     public void JoinGame(int location)
     {
         GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().JoinGame(location);
