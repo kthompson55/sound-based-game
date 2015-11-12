@@ -11,7 +11,7 @@ public class EchoSpawner : MonoBehaviour {
     public float fadeDelay = 0.0f;			
     public float fadeRate = 1.0f;			
     public float echoSpeed = 9.0f;
-    public Color echoColor;
+    public Color echoColor = Color.white;
 
     private float dt = 0.0f;
 
