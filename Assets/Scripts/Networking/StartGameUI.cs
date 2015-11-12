@@ -21,4 +21,8 @@ public class StartGameUI : MonoBehaviour {
         myNetwork.StartGame(matchName.text);
     }
 
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }
