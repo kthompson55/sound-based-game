@@ -8,9 +8,9 @@ public class MyNetworkManager : NetworkManager
 
     void Start()
     {
-        NetworkManager.singleton.StartMatchMaker();
-        singleton.matchSize = 4;
-        singleton.matchName = "name";
+        //NetworkManager.singleton.StartMatchMaker();
+        //singleton.matchSize = 4;
+        //singleton.matchName = "name";
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
@@ -36,8 +36,19 @@ public class MyNetworkManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
     }
 
-    public void StartGame()
+    public void SetUpNetworking()
     {
+        Debug.Log("Seting up networking");
+        NetworkManager.singleton.StartMatchMaker();
+        singleton.matchSize = 4;
+        singleton.matchName = "name";
+    }
+
+    public void StartGame(string textName)
+    {
+        SetUpNetworking();
+        singleton.matchName = textName;
+
         MyNetworkManager.singleton.matchMaker.CreateMatch(matchName, matchSize, true, "", OnMatchCreate);
         //NetworkManager.singleton.StartHost();
     }
