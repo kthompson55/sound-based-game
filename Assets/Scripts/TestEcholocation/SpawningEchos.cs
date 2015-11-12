@@ -9,6 +9,7 @@ public class SpawningEchos : MonoBehaviour {
     public float fade = 0.0f;
     public float speed = 9.0f;
     private float spawnTime = 0.0f;
+    public Color echoColor = Color.white;
 
 	void Start () {
 	
@@ -27,6 +28,8 @@ public class SpawningEchos : MonoBehaviour {
             spawnTime = 0.0f;
             GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
             EchoSpawner t = temp.GetComponent<EchoSpawner>();
+            Debug.Log(gameObject.name + ": "+ t.getEchoLocation());
+            t.echoColor = echoColor;
             t.maxRadius = maxRadius;
             t.fade = fade;
             t.echoSpeed = speed;
