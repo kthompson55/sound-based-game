@@ -13,6 +13,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public float jumpHeight;
     public float jumpSpeed;
     public float jumpMovementModifier;
+    public float gravityEffectModifier;
     public float hCameraSpeed;
     public float vCameraSpeed;
     public float posCameraBounds;
@@ -31,12 +32,14 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     private float vRotation;
     private bool leavingWater;
     private float currJumpCap = 0;
+    private float gravityVelocity;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
         rigidbody = GetComponent<Rigidbody>();
         jumping = false;
+        gravityVelocity = 0;
     }
 
     void Update()
@@ -120,7 +123,8 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
             }
             else if (jumping)
             {
-                float jumpShift = jumpSpeed * Time.deltaTime * (currJumpCap - transform.localPosition.y);
+                gravityVelocity = (currJumpCap - transform.localPosition.y) / gravityEffectModifier;
+                float jumpShift = jumpSpeed * Time.deltaTime * gravityVelocity;
                 jumpTracking += jumpShift;
                 yMovement = jumpShift + Physics.gravity.y * Time.deltaTime;
                 if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
@@ -130,7 +134,8 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
             }
             else
             {
-                yMovement = Physics.gravity.y * Time.deltaTime;
+                gravityVelocity += Physics.gravity.y * Time.deltaTime;
+                yMovement = gravityVelocity * Time.deltaTime;
             }
         }
 
