@@ -376,29 +376,9 @@
 			t= c1 +c2 +c3 +c4 +c5 +c6 +c7 +c8 +c9 +c10 +c11 +c12 +c13 +c14 +c15 +c16 +c17 +c18 +c19 +c20; 
 			float t1 = 1.0 - t;
 
-			float f1 = 1.0 - c1;
-			float f2 = 1.0 - c2;
-			float f3 = 1.0 - c3;
-			float f4 = 1.0 - c4;
-			float f5 = 1.0 - c5;
-			float f6 = 1.0 - c6;
-			float f7 = 1.0 - c7;
-			float f8 = 1.0 - c8;
-			float f9 = 1.0 - c9;
-			float f10 = 1.0 - c10;
-			float f11 = 1.0 - c11;
-			float f12 = 1.0 - c12;
-			float f13 = 1.0 - c13;
-			float f14 = 1.0 - c14;
-			float f15 = 1.0 - c15;
-			float f16 = 1.0 - c16;
-			float f17 = 1.0 - c17;
-			float f18 = 1.0 - c18;
-			float f19 = 1.0 - c19;
-			float f20 = 1.0 - c20;
+
 			
-			float3 temp = _MainColor0 * f1 +tex2D(_MainTex, IN.uv_MainTex).rgb * (c1);
-			o.Albedo = (_MainColor * t1) + tex2D(_MainTex, IN.uv_MainTex).rgb *t;
+			o.Albedo = (_MainColor *t1);
 			o.Albedo += _MainColor0 * c1;
 			o.Albedo += _MainColor1 * (c2);
 			o.Albedo += _MainColor2 * c3;

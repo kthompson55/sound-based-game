@@ -21,13 +21,17 @@ public class EchoSpawner : MonoBehaviour {
 
     private EchoManager listener;
 
+    public bool Starts=false;
+
 	// Use this for initialization
 	void Start () {
 
         currentRadius = 0.0f;
         fade = 0.0f;
         echoMaterial.SetFloat("_DistanceFade", 1.0f);
-        
+        echoMaterial.SetColor("_MainColor" + echolLocation, echoColor);
+        echoMaterial.SetFloat("_Radius" + echolLocation, currentRadius);
+        echoMaterial.SetFloat("_Fade" + echolLocation, fade);
 
 	}
 	
@@ -35,12 +39,14 @@ public class EchoSpawner : MonoBehaviour {
 	void Update () {
         dt += Time.deltaTime;
 
+
         if (currentRadius >= maxRadius)
         {
             currentRadius = 0.0f;
             fade = 0.0f;
             echoMaterial.SetFloat("_Radius" + echolLocation, currentRadius);
             echoMaterial.SetFloat("_Fade" + echolLocation, fade);
+            //echoMaterial.SetColor("_MainColor" + echolLocation, Color.white);
 
             if (listener != null)
             {
@@ -53,6 +59,7 @@ public class EchoSpawner : MonoBehaviour {
             currentRadius += Time.deltaTime * echoSpeed;
             updateShader();
         }
+        
 
 	}
 
@@ -77,11 +84,17 @@ public class EchoSpawner : MonoBehaviour {
         {
             fade += Time.deltaTime * fadeRate;
         }
+        echoMaterial.SetColor("_MainColor" + echolLocation, echoColor);
         echoMaterial.SetVector("_Position"+echolLocation, transform.position);
         echoMaterial.SetFloat("_Radius"+echolLocation, currentRadius);
         echoMaterial.SetFloat("_MaxRadius"+echolLocation, maxRadius);
         echoMaterial.SetFloat("_Fade" + echolLocation, fade);
         echoMaterial.SetFloat("_MaxFade", maxRadius/echoSpeed);
-        echoMaterial.SetColor("_MainColor" + echolLocation, echoColor);
+
+        if (echoColor.r != 0)
+        {
+            Debug.Log(echoColor);
+            Debug.Log(echolLocation);
+        }
     }
 }

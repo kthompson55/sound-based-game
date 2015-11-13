@@ -90,7 +90,10 @@ public class SpiritualBody : NetworkBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
-                EchoManage.GetComponent<EchoManager>().spawnAnEchoLocation(hit.point);
+               EchoSpawner echo= EchoManage.GetComponent<EchoManager>().spawnAnEchoLocation(hit.point).GetComponent<EchoSpawner>();
+               echo.echoSpeed = 7.5f;
+               echo.maxRadius = 15.0f;
+               echo.fadeRate = 1.5f;
             }
         }
 
