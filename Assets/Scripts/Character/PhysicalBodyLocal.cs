@@ -12,10 +12,10 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public GameObject followingCamera;
     public GameObject otherCamera;
     public float speed;
-    public float runModifier;
     public float jumpHeight;
     public float jumpSpeed;
     public float jumpMovementModifier;
+    public float gravityEffectModifier;
     public float hCameraSpeed;
     public float vCameraSpeed;
     public float posCameraBounds;
@@ -36,9 +36,8 @@ public class PhysicalBodyLocal : NetworkBehaviour
     private float hRotation;
     private float vRotation;
     private bool leavingWater;
-    private float currJumpCap;
-    private float jumpLockTimer;
-    public float jumpLockDuration = 0.1f;
+    private float currJumpCap = 0;
+    private float gravityVelocity;
 
     void Start()
     {
@@ -113,7 +112,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         {
             xMovement *= swimMovementRate;
             zMovement *= swimMovementRate;
-            if (Input.GetButton("Jump"))
+            if(Input.GetButton("Jump"))
             {
                 yMovement = swimUpSpeed * Time.deltaTime;
             }
@@ -146,70 +145,35 @@ public class PhysicalBodyLocal : NetworkBehaviour
                     zMovement *= jumpMovementModifier;
                 }
             }
-            else 
-            {
-                jumpLockTimer += Time.deltaTime;
-                if (jumpLockTimer > jumpLockDuration) 
-                {
-                    jumpLockTimer = 0;
-                    jumpLocked = false;
-                }
-            }
 
             // handle upward and downward movements of jumping
-            if (controller.isGrounded && !jumpLocked)
+            if (controller.isGrounded && !jumping)
             {
                 if (Input.GetButton("Jump"))
                 {
                     jumpTracking = 0;
                     jumping = true;
-                    jumpLocked = true;
                     jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
                     currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
                 }
             }
             else if (jumping)
             {
-                float jumpShift = jumpSpeed * Time.deltaTime * (currJumpCap - transform.localPosition.y);
+                gravityVelocity = (currJumpCap - transform.localPosition.y) / gravityEffectModifier;
+                float jumpShift = jumpSpeed * Time.deltaTime * gravityVelocity;
                 jumpTracking += jumpShift;
                 yMovement = jumpShift + Physics.gravity.y * Time.deltaTime;
-                if (jumpTracking >= jumpHeight)
+                if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
                 {
                     jumping = false;
                 }
             }
             else
             {
-                yMovement = Physics.gravity.y * Time.deltaTime * Mathf.Clamp((currJumpCap - transform.localPosition.y), 0f, 1.0f);
+                gravityVelocity += Physics.gravity.y * Time.deltaTime;
+                yMovement = gravityVelocity * Time.deltaTime;
             }
         }
-
-        // adjust rotationMovement
-        hRotation += Input.GetAxisRaw("RotateCameraHorizontal") * Time.deltaTime * hCameraSpeed;
-        vRotation += Input.GetAxisRaw("RotateCameraVertical") * Time.deltaTime * vCameraSpeed;
-        if (vRotation > posCameraBounds)
-        {
-            vRotation = posCameraBounds;
-        }
-        else if (vRotation < negCameraBounds)
-        {
-            vRotation = negCameraBounds;
-        }
-
-        // change rotation based on current camera angle
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
-        Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
-        followingCamera.transform.position = new Vector3(followingCamera.transform.position.x, transform.position.y + vRotation, followingCamera.transform.position.z);
-
-        // apply movement
-        if(Input.GetButton("Sprint") && controller.isGrounded)
-        {
-            xMovement *= runModifier;
-            zMovement *= runModifier;
-        }
-        Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
-        controller.Move(cameraRotation * moveVector);
-
     }
 
     [ClientRpc]
