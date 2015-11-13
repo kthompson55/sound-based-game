@@ -30,11 +30,18 @@ public class EnterKey : MonoBehaviour, KeyboardKey
         }
 
         string matchName = fieldToModify.text;
-        
-        MyNetworkManager myNetwork = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>(); ;
-        myNetwork.matchName = matchName;
-        myNetwork.matchSize = 2;
-        MyNetworkManager.singleton.matchName = matchName;
-        myNetwork.StartGame(matchName);
+        if(matchName.Length > 0)
+        {
+            MyNetworkManager myNetwork = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>(); ;
+            myNetwork.matchName = matchName;
+            myNetwork.matchSize = 2;
+            MyNetworkManager.singleton.matchName = matchName;
+
+            myNetwork.StartGame(matchName);
+        }
+        else
+        {
+            fieldToModify.image.color = Color.red;
+        }
     }
 }

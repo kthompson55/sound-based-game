@@ -29,6 +29,7 @@ public class AlphabetKey : MonoBehaviour, KeyboardKey
                 break;
             }
         }
+        fieldToModify.image.color = Color.white;
 
         fieldToModify.text += gameObject.name;
     }
