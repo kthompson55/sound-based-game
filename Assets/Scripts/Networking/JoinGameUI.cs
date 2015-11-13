@@ -16,7 +16,7 @@ public class JoinGameUI : MonoBehaviour {
         //GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().JoinGame();
     }
 
-    public void JoinGame(int locatioin)
+    public void JoinGame(int location)
     {
 
     }

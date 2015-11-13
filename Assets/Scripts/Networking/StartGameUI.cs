@@ -7,8 +7,13 @@ public class StartGameUI : MonoBehaviour {
     //Called in main menu to switch scenes
     public void MyOnClick()
     {
-        Application.LoadLevel("CreateGameMenu");
+        Application.LoadLevel("Create_Room");
         //GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().StartGame();
+    }
+
+    public void JoinGame()
+    {
+        Application.LoadLevel("MultiplayerLobby");
     }
 
     //Called in create level scene to start the game
@@ -21,4 +26,9 @@ public class StartGameUI : MonoBehaviour {
         myNetwork.StartGame(matchName.text);
     }
 
+
+    public void ExitGame()
+    {
+        Application.Quit();
+    }
 }

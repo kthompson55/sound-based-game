@@ -6,6 +6,13 @@ public class MyNetworkManager : NetworkManager
 {
     public Vector3 spawnPos;
 
+    private GameManager manager;
+
+    void Awake()
+    {
+        manager = GetComponent<GameManager>();
+    }
+
     void Start()
     {
         //NetworkManager.singleton.StartMatchMaker();
@@ -46,6 +53,8 @@ public class MyNetworkManager : NetworkManager
 
     public void StartGame(string textName)
     {
+        manager.pausable = true;
+
         SetUpNetworking();
         singleton.matchName = textName;
 
