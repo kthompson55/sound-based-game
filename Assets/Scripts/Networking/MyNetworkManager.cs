@@ -8,16 +8,12 @@ public class MyNetworkManager : NetworkManager
 
     private GameManager manager;
 
-    void Awake()
-    {
-        manager = GetComponent<GameManager>();
-    }
-
     void Start()
     {
         //NetworkManager.singleton.StartMatchMaker();
         //singleton.matchSize = 4;
         //singleton.matchName = "name";
+        manager = GetComponent<GameManager>();
     }
 
     public override void OnServerAddPlayer(NetworkConnection conn, short playerControllerId)
