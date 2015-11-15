@@ -5,6 +5,7 @@ using System.Collections;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Animator))]
 public class PhysicalBodyWithoutNetworking : MonoBehaviour
 {
     public GameObject followingCamera;
@@ -23,12 +24,14 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public float sinkSpeed;
     public float swimUpSpeed;
 
+    private Animator animator;
     private CharacterController controller;
     private Rigidbody rigidbody;
     private bool jumping;
     private float jumpTracking;
     private Vector3 jumpingMovementDirection;
     private float hRotation;
+    private float previousHRotation;
     private float vRotation;
     private bool leavingWater;
     private float currJumpCap = 0;
@@ -38,8 +41,10 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     {
         controller = GetComponent<CharacterController>();
         rigidbody = GetComponent<Rigidbody>();
+        animator = GetComponent<Animator>();
         jumping = false;
         gravityVelocity = 0;
+        previousHRotation = 0;
     }
 
     void Update()
@@ -151,6 +156,23 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
             vRotation = negCameraBounds;
         }
 
+        Vector2 groundMotion = new Vector2(xMovement, zMovement);
+
+        animator.SetBool("OnGround", !jumping);
+        animator.SetFloat("Forward", groundMotion.magnitude * speed);
+        if (previousHRotation > hRotation)
+        {
+            animator.SetFloat("Turn", -100);
+        }
+        else if (previousHRotation < hRotation)
+        {
+            animator.SetFloat("Turn", 100);
+        }
+        else
+        {
+            animator.SetFloat("Turn", 0);
+        }
+        
         // change rotation based on current camera angle
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
@@ -158,6 +180,8 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         // apply movement
         Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
         controller.Move(cameraRotation * moveVector);
+
+        previousHRotation = hRotation;
     }
 
     public void StartSwimming()

@@ -51,7 +51,7 @@ public class Health : MonoBehaviour
         }
     }
 	
-	void OnCollisionEnter (Collision col)
+	void OnTriggerEnter (Collider col)
 	{
 		if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "Trap") && !hit) {
             Debug.Log("ouch");
