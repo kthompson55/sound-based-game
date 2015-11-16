@@ -23,6 +23,8 @@ public class LobbyManger : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
+        Debug.Log("Hi");
+
         if (mnm == null)
         {
             mnm = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
@@ -36,17 +38,19 @@ public class LobbyManger : MonoBehaviour {
             }
         }
 
-        if (mnm!=null&&mnm.AreMatches())
+        if (mnm!=null&&MyNetworkManager.singleton.matchMaker!=null)
         {
             MyNetworkManager.singleton.matchMaker.ListMatches(0, 20, "", MyNetworkManager.singleton.OnMatchList);
-
-            if (matchsCount < mnm.matches.Count)
+            if (mnm.AreMatches())
             {
-                for (int run = matchsCount; run < mnm.matches.Count; run++)
+                if (matchsCount < mnm.matches.Count)
                 {
-                    matchNameColumn.AddRow(run);
+                    for (int run = matchsCount; run < mnm.matches.Count; run++)
+                    {
+                        matchNameColumn.AddRow(run);
+                    }
+                    matchsCount = mnm.matches.Count;
                 }
-                matchsCount = mnm.matches.Count;
             }
         }
 	}
