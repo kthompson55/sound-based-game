@@ -7,6 +7,7 @@ using UnityStandardAssets.ImageEffects;
 
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
+[RequireComponent(typeof(Animator))]
 public class PhysicalBodyLocal : NetworkBehaviour
 {
     public GameObject followingCamera;
@@ -28,12 +29,14 @@ public class PhysicalBodyLocal : NetworkBehaviour
     private EchoManager em;
     private DateTime waitSoundTime;
 
+    private Animator animator;
     private CharacterController controller;
     private Rigidbody rigidbody;
     private bool jumping;
     private float jumpTracking;
     private Vector3 jumpingMovementDirection;
     private float hRotation;
+    private float previousHRotation;
     private float vRotation;
     private bool leavingWater;
     private float currJumpCap = 0;
@@ -112,7 +115,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         {
             xMovement *= swimMovementRate;
             zMovement *= swimMovementRate;
-            if(Input.GetButton("Jump"))
+            if (Input.GetButton("Jump"))
             {
                 yMovement = swimUpSpeed * Time.deltaTime;
             }
@@ -174,6 +177,45 @@ public class PhysicalBodyLocal : NetworkBehaviour
                 yMovement = gravityVelocity * Time.deltaTime;
             }
         }
+
+        // adjust rotationMovement
+        hRotation += Input.GetAxisRaw("RotateCameraHorizontal") * Time.deltaTime * hCameraSpeed;
+        vRotation += Input.GetAxisRaw("RotateCameraVertical") * Time.deltaTime * vCameraSpeed;
+        if (vRotation > posCameraBounds)
+        {
+            vRotation = posCameraBounds;
+        }
+        else if (vRotation < negCameraBounds)
+        {
+            vRotation = negCameraBounds;
+        }
+
+        Vector2 groundMotion = new Vector2(xMovement, zMovement);
+
+        animator.SetBool("OnGround", !jumping);
+        animator.SetFloat("Forward", groundMotion.magnitude * speed);
+        if (previousHRotation > hRotation)
+        {
+            animator.SetFloat("Turn", -100);
+        }
+        else if (previousHRotation < hRotation)
+        {
+            animator.SetFloat("Turn", 100);
+        }
+        else
+        {
+            animator.SetFloat("Turn", 0);
+        }
+
+        // change rotation based on current camera angle
+        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
+        Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
+        followingCamera.transform.position = new Vector3(followingCamera.transform.position.x, transform.position.y + vRotation, followingCamera.transform.position.z);
+        // apply movement
+        Vector3 moveVector = new Vector3(xMovement, yMovement, zMovement);
+        controller.Move(cameraRotation * moveVector);
+
+        previousHRotation = hRotation;
     }
 
     [ClientRpc]
