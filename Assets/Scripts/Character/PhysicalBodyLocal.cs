@@ -49,6 +49,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         rigidbody = GetComponent<Rigidbody>();
         jumping = false;
         currJumpCap = gameObject.transform.localPosition.y + jumpHeight;
+        animator = GetComponent<Animator>();
     }
 
 

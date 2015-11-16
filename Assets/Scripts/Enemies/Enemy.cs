@@ -22,6 +22,7 @@ public class Enemy : NetworkBehaviour
     public bool isWaiting;
     public bool stopChasing;
     private DateTime waitSoundTime;
+    public bool debugOn = false;
 
     void Start() {
         nextNodeIndex = 0;
@@ -47,7 +48,11 @@ public class Enemy : NetworkBehaviour
         if (spirit.GetComponent<SpiritualBody>() != null)
         {
             isWaiting = true;
-            Debug.Log("Enemy has been hit!");
+            if (debugOn)
+            {
+                Debug.Log("Enemy has been hit!");
+            }
+           
             waitStart = System.DateTime.Now.Second;// *10000;
         }
     }
@@ -60,9 +65,13 @@ public class Enemy : NetworkBehaviour
         //Debug.Log("Chasing: " + isChasing);
 
         //waiting after reaching chase location
-        Debug.Log("Is waiting: " + isWaiting);
-        Debug.Log("Is chasing: " + isChasing);
-        Debug.Log("is Patrolling: " + isPatrolling);
+        if (debugOn)
+        {
+            Debug.Log("Is waiting: " + isWaiting);
+            Debug.Log("Is chasing: " + isChasing);
+            Debug.Log("is Patrolling: " + isPatrolling);
+        }
+        
         if (isWaiting) 
         {
             //Debug.Log("Waiting");
@@ -74,7 +83,11 @@ public class Enemy : NetworkBehaviour
             //Debug.Log("Wait start: " + waitStart);
             if (waitStart > waitDuration)//((System.DateTime.Now.Second) - waitStart) > (waitDuration))
             {
-                Debug.Log("Waiting time is up");
+                if (debugOn)
+                {
+                    Debug.Log("Waiting time is up");
+                }
+                
                 isWaiting = false;
                 if(pathPoints.Length > 0)
                     ChangeTarget(pathPoints[nextNodeIndex].transform.position);
@@ -82,7 +95,11 @@ public class Enemy : NetworkBehaviour
         } 
         else if (isChasing) 
         {
-            Debug.Log("Chasing");
+            if (debugOn)
+            {
+                Debug.Log("Chasing");
+            }
+            
             Vector3 path = targetPosition - fromPosition;
             path.y = 0;
             Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
@@ -95,7 +112,11 @@ public class Enemy : NetworkBehaviour
 
             if (ReachedOrOverShotTarget(path, targetPosition))
             {
-                Debug.Log("Reached or overshot target");
+                if (debugOn)
+                {
+                    Debug.Log("Reached or overshot target");
+                }
+               
                 isChasing = false;
                 isWaiting = true;
                 waitStart = 0;// System.DateTime.Now.Second;// .Ticks * 10000;
@@ -104,7 +125,11 @@ public class Enemy : NetworkBehaviour
 
         //don't patrol if chasing
         else if (isPatrolling)  {
-            Debug.Log("Patrolling");
+            if (debugOn)
+            {
+                Debug.Log("Patrolling");
+            }
+            
             Vector3 path = targetPosition - fromPosition;
             path.y = 0;
             Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
@@ -148,7 +173,11 @@ public class Enemy : NetworkBehaviour
     public void ChasePlayer(Collider player) {
         if (!isWaiting)
         {
-            Debug.Log("Chase player!");
+            if (debugOn)
+            {
+                Debug.Log("Chase player!");
+            }
+           
             isChasing = true;
             ChangeTarget(player.transform.position);
         }
