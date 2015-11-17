@@ -13,6 +13,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
     public GameObject followingCamera;
     public GameObject otherCamera;
     public float speed;
+    public float runMultiplier;
     public float jumpHeight;
     public float jumpSpeed;
     public float jumpMovementModifier;
@@ -191,8 +192,13 @@ public class PhysicalBodyLocal : NetworkBehaviour
             vRotation = negCameraBounds;
         }
 
+        if (controller.isGrounded && Input.GetButton("Sprint"))
+        {
+            xMovement *= runMultiplier;
+            zMovement *= runMultiplier;
+        }
+        
         Vector2 groundMotion = new Vector2(xMovement, zMovement);
-
         animator.SetBool("OnGround", !jumping);
         animator.SetFloat("Forward", groundMotion.magnitude * speed);
         if (previousHRotation > hRotation)

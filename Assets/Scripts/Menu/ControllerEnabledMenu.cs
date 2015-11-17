@@ -33,6 +33,7 @@ public class ControllerEnabledMenu : MonoBehaviour
 	void Update () 
     {
         float direction = Input.GetButtonDown("Vertical") ? Input.GetAxis("Vertical") : 0;
+        Debug.Log(direction);
         menuButtons[currentButtonIndex].GetComponentInChildren<Text>().color = unselectedButtonTextColor;
         // move up in menu
         if(direction > 0 && currentButtonIndex > 0)
