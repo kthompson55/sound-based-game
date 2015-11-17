@@ -10,7 +10,6 @@ public class MyNetworkManager : NetworkManager
 
     void Start()
     {
-        MyNetworkManager.singleton.StartMatchMaker();
        
         manager = GetComponent<GameManager>();
     }
@@ -38,19 +37,18 @@ public class MyNetworkManager : NetworkManager
         NetworkServer.AddPlayerForConnection(conn, player, playerControllerId);
     }
 
-    public void SetUpNetworking()
+    void Update()
     {
-        Debug.Log("Seting up networking");
-        //NetworkManager.singleton.StartMatchMaker();
-        //singleton.matchSize = 4;
-        //singleton.matchName = "name";
+        if (singleton.matches == null)
+        {
+            MyNetworkManager.singleton.StartMatchMaker();
+            Debug.Log("Seting up networking");
+        }
     }
 
     public void StartGame(string textName)
     {
         manager.pausable = true;
-        Debug.Log("Hi");
-        //SetUpNetworking();
         matchName = textName;
         matchMaker.CreateMatch(matchName, matchSize, true, "", OnMatchCreate);
         //NetworkManager.singleton.StartHost();

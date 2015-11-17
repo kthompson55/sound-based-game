@@ -10,6 +10,7 @@ public class SpiritCameraControls : NetworkBehaviour
     public float turnSpeed;
     public Transform player;
 
+
     private Vector3 offset;
 
     void Start()
