@@ -142,7 +142,8 @@ public class Enemy : NetworkBehaviour
         if(System.DateTime.Now.Subtract(waitSoundTime).Seconds>=5){
             waitSoundTime = System.DateTime.Now;
             EchoManager things = GameObject.Find("EchoManager").GetComponent<EchoManager>();
-            GameObject.Find("EchoManager").GetComponent<EchoManager>().spawnAnEchoLocation(gameObject.transform.position);
+            GameObject t=things.spawnAnEchoLocation(gameObject.transform.position);
+            t.GetComponent<EchoSpawner>().echoColor = Color.red;
         }
     }
 

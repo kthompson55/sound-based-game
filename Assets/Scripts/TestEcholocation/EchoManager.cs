@@ -22,6 +22,7 @@ public class EchoManager : MonoBehaviour {
         echoArray[whatSpot] = false;
     }
 
+    //Spawns defualt white echos
     public GameObject spawnAnEchoLocation(Vector3 where)
     {
         (whatToSpawn.GetComponent<EchoSpawner>()).setEchoLocation(nextAvaibleSpot);
@@ -29,6 +30,23 @@ public class EchoManager : MonoBehaviour {
         Object temp = Instantiate(whatToSpawn, where, new Quaternion());
         ((GameObject)temp).GetComponent<EchoSpawner>().subscribeToDeath(this);
         ((GameObject)temp).GetComponent<EchoSpawner>().setEchoLocation(nextAvaibleSpot);
+
+        getNextSpot();
+        return (GameObject)temp;
+    }
+
+    //Spawns the echo of the passed in color
+    public GameObject spawnAnEchoLocation(Color c,Vector3 where)
+    {
+        (whatToSpawn.GetComponent<EchoSpawner>()).setEchoLocation(nextAvaibleSpot);
+        whatToSpawn.GetComponent<EchoSpawner>().echoMaterial.SetColor("_MainColor" + nextAvaibleSpot, c);
+        echoArray[nextAvaibleSpot] = true;
+        Object temp = Instantiate(whatToSpawn, where, new Quaternion());
+        ((GameObject)temp).GetComponent<EchoSpawner>().subscribeToDeath(this);
+        ((GameObject)temp).GetComponent<EchoSpawner>().setEchoLocation(nextAvaibleSpot);
+        ((GameObject)temp).GetComponent<EchoSpawner>().echoColor = c;
+        (whatToSpawn.GetComponent<EchoSpawner>()).echoColor = Color.white;
+        ((GameObject)temp).GetComponent<EchoSpawner>().Starts = true;
 
         getNextSpot();
         return (GameObject)temp;

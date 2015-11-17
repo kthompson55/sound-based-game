@@ -10,6 +10,7 @@ public class SpiritCameraControls : NetworkBehaviour
     public float turnSpeed;
     public Transform player;
 
+
     private Vector3 offset;
 
     void Start()
@@ -17,7 +18,7 @@ public class SpiritCameraControls : NetworkBehaviour
         //player = GameObject.Find("");
         offset = new Vector3(0, cameraHeight, cameraDistance);
     }
-    
+
     void LateUpdate()
     {
         if (player == null)

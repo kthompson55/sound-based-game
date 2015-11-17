@@ -15,12 +15,26 @@ public class SpiritualBody : NetworkBehaviour
     private Vector3 position;
     public PhysicalBodyLocal physicalBody;
     public bool attacking;
+    public GameObject AttackUI;
+    public GameObject PingUI;
 
     void Start()
     {
         GetComponent<BoxCollider>().isTrigger = false;
         GetComponent<MeshRenderer>().enabled = false;
         attacking = false;
+
+        //Spawn UI for this player mabye might also spawn with the physical player
+        if (!isLocalPlayer) return;
+        Canvas t=FindObjectOfType<Canvas>();
+        if(t!=null){
+           GameObject d= ((GameObject)GameObject.Instantiate(AttackUI,AttackUI.transform.position,new Quaternion()));
+           d.transform.SetParent(t.transform);
+           d.transform.localPosition = new Vector3(AttackUI.transform.position.x, AttackUI.transform.position.y, AttackUI.transform.position.z);
+           GameObject s = ((GameObject)GameObject.Instantiate(PingUI, PingUI.transform.position, new Quaternion()));
+           s.transform.SetParent(t.transform);
+           s.transform.localPosition = new Vector3(PingUI.transform.position.x, PingUI.transform.position.y, PingUI.transform.position.z);
+        }
     }
         
     void Update()
@@ -90,7 +104,10 @@ public class SpiritualBody : NetworkBehaviour
             RaycastHit hit;
             if (Physics.Raycast(ray, out hit, Mathf.Infinity))
             {
-                EchoManage.GetComponent<EchoManager>().spawnAnEchoLocation(hit.point);
+               EchoSpawner echo= EchoManage.GetComponent<EchoManager>().spawnAnEchoLocation(hit.point).GetComponent<EchoSpawner>();
+               echo.echoSpeed = 7.5f;
+               echo.maxRadius = 15.0f;
+               echo.fadeRate = 1.5f;
             }
         }
 

@@ -61,17 +61,26 @@ public class PhysicalBodyLocal : NetworkBehaviour
         {
             em = GameObject.Find("EchoManager").GetComponent<EchoManager>();
             waitSoundTime = System.DateTime.Now;
-            GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
+            GameObject temp = em.spawnAnEchoLocation(Color.green,gameObject.transform.position);
             temp.GetComponent<EchoSpawner>().echoSpeed = 1f;
             temp.GetComponent<EchoSpawner>().maxRadius = 2;
+            temp.GetComponent<EchoSpawner>().echoColor = Color.green;
+            temp.GetComponent<EchoSpawner>().echoMaterial.SetColor("_MainColor" + temp.GetComponent<EchoSpawner>().getEchoLocation(), Color.green);
+
+
         }
 
         if (System.DateTime.Now.Subtract(waitSoundTime).Seconds >= 1)
         {
             waitSoundTime = System.DateTime.Now;
-            GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
+
+
+            GameObject temp = em.spawnAnEchoLocation(Color.green,gameObject.transform.position);
             temp.GetComponent<EchoSpawner>().echoSpeed = 1f;
             temp.GetComponent<EchoSpawner>().maxRadius = 2;
+            temp.GetComponent<EchoSpawner>().echoColor = Color.green;
+            temp.GetComponent<EchoSpawner>().echoColor = Color.green;
+            temp.GetComponent<EchoSpawner>().echoMaterial.SetColor("_MainColor" + temp.GetComponent<EchoSpawner>().getEchoLocation(), Color.green);
 
         }
 

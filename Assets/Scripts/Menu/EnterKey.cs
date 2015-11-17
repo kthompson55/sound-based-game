@@ -4,6 +4,8 @@ using System.Collections;
 
 public class EnterKey : MonoBehaviour, KeyboardKey
 {
+    private bool stop = false;
+
     void Awake()
     {
         GetComponent<Button>().onClick.AddListener(delegate { HandlePressEvent(); });
@@ -30,14 +32,11 @@ public class EnterKey : MonoBehaviour, KeyboardKey
         }
 
         string matchName = fieldToModify.text;
-        if(matchName.Length > 0)
+        if(!stop&&matchName.Length > 0)
         {
-            MyNetworkManager myNetwork = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>(); ;
-            myNetwork.matchName = matchName;
-            myNetwork.matchSize = 2;
-            MyNetworkManager.singleton.matchName = matchName;
-
+            MyNetworkManager myNetwork = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
             myNetwork.StartGame(matchName);
+            stop = true;
         }
         else
         {
