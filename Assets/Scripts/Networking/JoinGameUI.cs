@@ -10,7 +10,7 @@ public class JoinGameUI : MonoBehaviour {
     public void MyOnClick()
     {
         GameObject network = GameObject.Find("NetworkManager");
-        network.GetComponent<MyNetworkManager>().SetUpNetworking();
+        //network.GetComponent<MyNetworkManager>().SetUpNetworking();
         MyNetworkManager.singleton.matchMaker.ListMatches(0, 20, "", OnMatchList);
 
         //GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>().JoinGame();

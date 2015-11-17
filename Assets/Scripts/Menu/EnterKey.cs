@@ -32,6 +32,15 @@ public class EnterKey : MonoBehaviour, KeyboardKey
         }
 
         string matchName = fieldToModify.text;
-
+        if(!stop&&matchName.Length > 0)
+        {
+            MyNetworkManager myNetwork = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();
+            myNetwork.StartGame(matchName);
+            stop = true;
+        }
+        else
+        {
+            fieldToModify.image.color = Color.red;
+        }
     }
 }
