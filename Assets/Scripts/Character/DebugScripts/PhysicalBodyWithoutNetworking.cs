@@ -10,11 +10,14 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
 {
     public GameObject followingCamera;
     public GameObject otherCamera;
+
     public float speed;
+    public float runMultiplier;
     public float jumpHeight;
     public float jumpSpeed;
     public float jumpMovementModifier;
-    public float gravityEffectModifier;
+    public float jumpingGravityEffectModifier;
+    public float fallingGravityEffectModifier;
     public float hCameraSpeed;
     public float vCameraSpeed;
     public float posCameraBounds;
@@ -36,6 +39,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     private bool leavingWater;
     private float currJumpCap = 0;
     private float gravityVelocity;
+    private float fallTime;
 
     void Start()
     {
@@ -76,6 +80,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         float xMovement = Input.GetAxis("Horizontal") * Time.deltaTime * speed;
         float zMovement = Input.GetAxis("Vertical") * Time.deltaTime * speed;
         Vector3 currentMovementNormal = new Vector3(xMovement, 0, zMovement).normalized;
+        bool sprinting = false;
 
         if (isSwimming)
         {
@@ -103,21 +108,12 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         }
         else
         {
-            // reduce movement speed if attempting to move in a direction different from your running direction prior to jumping
-            if (!controller.isGrounded)
-            {
-                Vector3 directionNormal = jumpingMovementDirection.normalized;
-                float totalDifferenceFromDirection = Mathf.Abs(currentMovementNormal.x - directionNormal.x) + Mathf.Abs(currentMovementNormal.z - directionNormal.z);
-                if (totalDifferenceFromDirection > .3f)
-                {
-                    xMovement *= jumpMovementModifier;
-                    zMovement *= jumpMovementModifier;
-                }
-            }
-
-            // handle upward and downward movements of jumping
             if (controller.isGrounded && !jumping)
             {
+                gravityVelocity += Physics.gravity.y * Time.deltaTime;
+                yMovement = gravityVelocity * Time.deltaTime;
+                fallTime = 0;
+
                 if (Input.GetButton("Jump"))
                 {
                     jumpTracking = 0;
@@ -125,22 +121,33 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
                     jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
 		            currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
                 }
-            }
-            else if (jumping)
-            {
-                gravityVelocity = (currJumpCap - transform.localPosition.y) / gravityEffectModifier;
-                float jumpShift = jumpSpeed * Time.deltaTime * gravityVelocity;
-                jumpTracking += jumpShift;
-                yMovement = jumpShift + Physics.gravity.y * Time.deltaTime;
-                if (jumpTracking >= jumpHeight || !Input.GetButton("Jump"))
+                else if(Input.GetButton("Sprint"))
                 {
-                    jumping = false;
+                    sprinting = true;
+                    xMovement *= runMultiplier;
+                    zMovement *= runMultiplier;
                 }
             }
-            else
+            else if(!controller.isGrounded)
             {
-                gravityVelocity += Physics.gravity.y * Time.deltaTime;
-                yMovement = gravityVelocity * Time.deltaTime;
+                if (!jumping)
+                {
+                    gravityVelocity = (Physics.gravity.y * Time.deltaTime) / (fallingGravityEffectModifier - fallTime);
+                    yMovement = gravityVelocity;
+                    fallTime += Time.deltaTime * 3.0f;
+                }
+                else
+                {
+                    gravityVelocity = (currJumpCap - transform.localPosition.y) / jumpingGravityEffectModifier;
+                    float jumpShift = (jumpSpeed + gravityVelocity) * Time.deltaTime;
+                    jumpTracking += jumpShift;
+                    yMovement = jumpShift;
+                    if (jumpTracking >= jumpHeight)
+                    {
+                        jumping = false;
+                        fallTime = 0;
+                    }
+                }
             }
         }
 
@@ -157,9 +164,23 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         }
 
         Vector2 groundMotion = new Vector2(xMovement, zMovement);
+        animator.SetBool("OnGround", controller.isGrounded);
+        if(groundMotion.magnitude > 0)
+        {
+            if(sprinting)
+            {
+                animator.SetFloat("Forward", 1.0f);
+            }
+            else
+            {
+                animator.SetFloat("Forward", .7f);
+            }
+        }
+        else
+        {
+            animator.SetFloat("Forward", 0);
+        }
 
-        animator.SetBool("OnGround", !jumping);
-        animator.SetFloat("Forward", groundMotion.magnitude * speed);
         if (previousHRotation > hRotation)
         {
             animator.SetFloat("Turn", -100);
