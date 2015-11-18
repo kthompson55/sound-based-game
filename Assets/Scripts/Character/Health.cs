@@ -47,7 +47,8 @@ public class Health : MonoBehaviour
             MyNetworkManager.singleton.StopHost();
             MyNetworkManager.singleton.StopServer();
             MyNetworkManager.singleton.StopMatchMaker();
-            Application.LoadLevel("MainMenu");
+            //MyNetworkManager.singleton.StopClient();
+            Application.LoadLevel("Main_Menu");
         }
     }
 	
