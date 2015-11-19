@@ -141,7 +141,7 @@ public class SpiritualBody : NetworkBehaviour
             {
                 position = physicalBody.transform.position;
                 returning = false;
-                GetComponent<MeshRenderer>().enabled = false;
+                //GetComponent<MeshRenderer>().enabled = false;
             }
         }
     }
