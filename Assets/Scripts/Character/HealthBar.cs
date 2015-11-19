@@ -1,6 +1,8 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using System.Collections;
 
+[RequireComponent(typeof(Image))]
 [RequireComponent(typeof(RectTransform))]
 public class HealthBar : MonoBehaviour
 {
@@ -29,11 +31,28 @@ public class HealthBar : MonoBehaviour
         else 
         {
             transform.localScale = new Vector3(playerHealth.GetHealthPercentage(), 1, 1);//.x = playerHealth.GetHealthPercentage();
+
         }
 	}
 
     public void SetHealth(Health newPlayerHealth)
     {
         playerHealth = newPlayerHealth;
+    }
+
+    private void UpdateColor()
+    {
+        if(playerHealth.GetComponent<Health>().GetHealthPercentage() > .7f) // greater than 70%
+        {
+            GetComponent<Image>().color = Color.green;
+        }
+        else if(playerHealth.GetComponent<Health>().GetHealthPercentage() > .33f) // greater than 33%
+        {
+            GetComponent<Image>().color = Color.yellow;
+        }
+        else
+        {
+            GetComponent<Image>().color = Color.red;
+        }
     }
 }
