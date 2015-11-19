@@ -17,7 +17,6 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public float jumpSpeed;
     public float jumpMovementModifier;
     public float jumpingGravityEffectModifier;
-    public float fallingGravityEffectModifier;
     public float hCameraSpeed;
     public float vCameraSpeed;
     public float posCameraBounds;
@@ -132,7 +131,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
             {
                 if (!jumping)
                 {
-                    gravityVelocity = (Physics.gravity.y * Time.deltaTime) / (fallingGravityEffectModifier - fallTime);
+                    gravityVelocity = (Physics.gravity.y * Time.deltaTime * fallTime);
                     yMovement = gravityVelocity;
                     fallTime += Time.deltaTime * 3.0f;
                 }
