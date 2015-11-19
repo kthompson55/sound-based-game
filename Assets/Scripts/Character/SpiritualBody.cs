@@ -20,8 +20,8 @@ public class SpiritualBody : NetworkBehaviour
 
     void Start()
     {
-        GetComponent<BoxCollider>().isTrigger = false;
-        GetComponent<MeshRenderer>().enabled = false;
+        //GetComponent<BoxCollider>().isTrigger = false;
+        //GetComponent<MeshRenderer>().enabled = false;
         attacking = false;
 
         //Spawn UI for this player mabye might also spawn with the physical player
@@ -141,7 +141,7 @@ public class SpiritualBody : NetworkBehaviour
             {
                 position = physicalBody.transform.position;
                 returning = false;
-                GetComponent<MeshRenderer>().enabled = false;
+                //GetComponent<MeshRenderer>().enabled = false;
             }
         }
     }
@@ -170,9 +170,9 @@ public class SpiritualBody : NetworkBehaviour
             }
             else
             {
-                GetComponent<MeshRenderer>().enabled = false;
-                GetComponent<BoxCollider>().enabled = false;
-                GetComponent<BoxCollider>().isTrigger = false;
+                //GetComponent<MeshRenderer>().enabled = false;
+                //GetComponent<BoxCollider>().enabled = false;
+                //GetComponent<BoxCollider>().isTrigger = false;
                 attacking = false;
             }
         }
@@ -184,9 +184,9 @@ public class SpiritualBody : NetworkBehaviour
         }
         //if at body, enable attack input
         else {
-            GetComponent<MeshRenderer>().enabled = false;
-            GetComponent<BoxCollider>().isTrigger = false;
-            GetComponent<BoxCollider>().enabled = false;
+            //GetComponent<MeshRenderer>().enabled = false;
+            //GetComponent<BoxCollider>().isTrigger = false;
+            //GetComponent<BoxCollider>().enabled = false;
             attacking = false;
         }
 
@@ -204,9 +204,9 @@ public class SpiritualBody : NetworkBehaviour
             Vector2 displacementVector = GetDisplacementVector(angle);
             attackTarget = attackStart + new Vector3(displacementVector.x, 0, displacementVector.y);
             attacking = active = true;
-            GetComponent<BoxCollider>().enabled = true;
-            GetComponent<BoxCollider>().isTrigger = true;
-            GetComponent<MeshRenderer>().enabled = true;
+            //GetComponent<BoxCollider>().enabled = true;
+            //GetComponent<BoxCollider>().isTrigger = true;
+            //GetComponent<MeshRenderer>().enabled = true;
         }
     }
 
