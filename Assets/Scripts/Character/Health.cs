@@ -9,7 +9,7 @@ public class Health : MonoBehaviour
 	public int maxHealth;
 	public int currHealth;
     private BoxCollider collisionBox;
-    public Image hpBar;
+    public HealthBar hpBar;
 	
 	public float invincibilityTime = 0.5f;
 	private bool hit;
@@ -20,14 +20,7 @@ public class Health : MonoBehaviour
 		currHealth = maxHealth;
 		collisionBox = GetComponent<BoxCollider> ();
 		hit = false;
-        GameObject can = GameObject.Find("Canvas");
-        if (can) {
-            Image img = can.GetComponentInChildren<Image>();
-            img.GetComponent<HealthBar>().SetHealth(this);
-        }
-        else {
-            Debug.Log("No canvas, cannot display health");
-        }
+        hpBar.SetHealth(GetComponent<Health>());
 	}
 
     void Update()

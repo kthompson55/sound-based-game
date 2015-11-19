@@ -16,22 +16,10 @@ public class HealthBar : MonoBehaviour
 	
 	public void Update ()
     {
-        if (!playerHealth)
-        {
-            //fix later
-            GameObject possibleHealth = GameObject.Find("PhysicalBody_working");
-            // DEBUG scenes
-            if(!possibleHealth)
-            {
-                possibleHealth = GameObject.Find("DebugPhysicalCharacter");
-            }
-            playerHealth = (possibleHealth != null) ? possibleHealth.GetComponent<Health>() : 
-                GameObject.Find("PhysicalBody_working(Clone)").GetComponent<Health>();
-        }
-        else 
+        if (playerHealth)
         {
             transform.localScale = new Vector3(playerHealth.GetHealthPercentage(), 1, 1);//.x = playerHealth.GetHealthPercentage();
-
+            UpdateColor();
         }
 	}
 
@@ -44,7 +32,7 @@ public class HealthBar : MonoBehaviour
     {
         if(playerHealth.GetComponent<Health>().GetHealthPercentage() > .7f) // greater than 70%
         {
-            GetComponent<Image>().color = Color.green;
+            GetComponent<Image>().color = new Color(.129f, .553f, .114f, 1);
         }
         else if(playerHealth.GetComponent<Health>().GetHealthPercentage() > .33f) // greater than 33%
         {
