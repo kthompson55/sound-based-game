@@ -55,8 +55,6 @@ public class PhysicalBodyLocal : NetworkBehaviour
         animator = GetComponent<Animator>();
     }
 
-
-    private bool jumpLocked = false;
     void Update()
     {
         if (em == null)
@@ -88,12 +86,6 @@ public class PhysicalBodyLocal : NetworkBehaviour
 
         //Don't move other people plz.
         if (!isLocalPlayer) return;
-
-        if (Input.GetKeyDown(KeyCode.R))
-        {
-            Debug.Log("R presssed");
-            RpcLoadLevel("RPC called");
-        }
 
         #region Camera Fixes
         if (followingCamera == null)

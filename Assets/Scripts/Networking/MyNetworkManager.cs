@@ -42,7 +42,7 @@ public class MyNetworkManager : NetworkManager
         if (singleton.matches == null)
         {
             MyNetworkManager.singleton.StartMatchMaker();
-            Debug.Log("Seting up networking");
+            //Debug.Log("Seting up networking");
         }
     }
 

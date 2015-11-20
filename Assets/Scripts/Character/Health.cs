@@ -10,23 +10,20 @@ public class Health : MonoBehaviour
 	public int currHealth;
     private BoxCollider collisionBox;
     public HealthBar hpBar;
-    public Image damageSplash;
-    public Color flashColor;
-    public float flashSpeed;
 	
 	public float invincibilityTime = 0.5f;
 	private bool hit;
 	private long hitTime;
-    private bool flashOn;
-    private bool flashOff;
 	
 	void Start ()
 	{
 		currHealth = maxHealth;
 		collisionBox = GetComponent<BoxCollider> ();
 		hit = false;
-        flashOn = false;
-        flashOff = false;
+        if(!hpBar)
+        {
+            hpBar = FindObjectOfType<HealthBar>();
+        }
         hpBar.SetHealth(GetComponent<Health>());
 	}
 
@@ -39,14 +36,6 @@ public class Health : MonoBehaviour
             {
                 hit = false;
             }
-        }
-        if(flashOn)
-        {
-            ShowDamageFlash();
-        }
-        else if(flashOff)
-        {
-            HideDamageFlash();
         }
 
         if(currHealth <= 0)
@@ -63,12 +52,14 @@ public class Health : MonoBehaviour
 	
 	void OnTriggerEnter (Collider col)
 	{
-		if ((col.gameObject.tag == "Enemy" || col.gameObject.tag == "Trap") && !hit) {
+        MonoBehaviour damageSource = GetDamageSource(col.gameObject.transform);
+        if (damageSource != null && !hit) 
+        {
             currHealth -= col.gameObject.tag == "Enemy" ? col.gameObject.GetComponent<Enemy> ().damage : col.gameObject.GetComponent<Trap> ().damage;
             currHealth = Mathf.Clamp(currHealth, 0, maxHealth);
             hit = true;
 			hitTime = System.DateTime.Now.Ticks * 10000;
-            flashOn = true;
+            hpBar.StartFlash();
 		}
 	}
 	
@@ -77,32 +68,42 @@ public class Health : MonoBehaviour
         return ((float)currHealth) / ((float)maxHealth);
 	}
 
-    void ShowDamageFlash()
+    private MonoBehaviour GetDamageSource(Transform transform)
     {
-        damageSplash.color = Color.Lerp(damageSplash.color, flashColor, flashSpeed);
-        if(CompareColors(damageSplash.color, flashColor))
+        MonoBehaviour behaviour = null;
+        GameObject damageObject = null;
+        string tag = transform.gameObject.tag;
+        bool isDamageSource = tag == "Enemy" || tag == "Trap";
+        if(!isDamageSource)
         {
-            flashOn = false;
-            flashOff = true;
+            for (int i = 0; i < transform.childCount; i++)
+            {
+                tag = transform.GetChild(i).gameObject.tag;
+                isDamageSource = tag == "Enemy" || tag == "Trap";
+                if (isDamageSource)
+                {
+                    damageObject = transform.GetChild(i).gameObject;
+                    break;
+                }
+            }
         }
-    }
-
-    void HideDamageFlash()
-    {
-        damageSplash.color = Color.Lerp(damageSplash.color, Color.clear, flashSpeed);
-        if(CompareColors(damageSplash.color, Color.clear))
+        else
         {
-            flashOff = false;
+            damageObject = transform.gameObject;
         }
-    }
 
-    private bool CompareColors(Color first, Color second)
-    {
-        bool redValue = Mathf.Abs(first.r - second.r) < .05f;
-        bool greenValue = Mathf.Abs(first.g - second.g) < .05f;
-        bool blueValue = Mathf.Abs(first.b - second.b) < .05f;
-        bool alphaValue = Mathf.Abs(first.a - second.a) < .1f;
+        if(isDamageSource)
+        {
+            if(tag == "Enemy")
+            {
+                behaviour = damageObject.GetComponent<Enemy>();
+            }
+            else if(tag == "Trap")
+            {
+                behaviour = damageObject.GetComponent<Trap>();
+            }
+        }
 
-        return redValue && greenValue && blueValue && alphaValue;
+        return behaviour;
     }
 }

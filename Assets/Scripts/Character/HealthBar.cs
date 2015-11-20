@@ -6,12 +6,18 @@ using System.Collections;
 [RequireComponent(typeof(RectTransform))]
 public class HealthBar : MonoBehaviour
 {
+    public Image damageSplash;
+    public Color flashColor;
+    public float flashSpeed;
+    
     private Health playerHealth;
-	private RectTransform rectTrans;
+    private bool flashOn;
+    private bool flashOff;
 	
 	public void Start ()
 	{
-		rectTrans = GetComponent<RectTransform> ();
+        flashOn = false;
+        flashOff = false;
 	}
 	
 	public void Update ()
@@ -20,6 +26,15 @@ public class HealthBar : MonoBehaviour
         {
             transform.localScale = new Vector3(playerHealth.GetHealthPercentage(), 1, 1);//.x = playerHealth.GetHealthPercentage();
             UpdateColor();
+
+            if (flashOn)
+            {
+                ShowDamageFlash();
+            }
+            else if (flashOff)
+            {
+                HideDamageFlash();
+            }
         }
 	}
 
@@ -42,5 +57,39 @@ public class HealthBar : MonoBehaviour
         {
             GetComponent<Image>().color = Color.red;
         }
+    }
+
+    public void StartFlash()
+    {
+        flashOn = true;
+    }
+
+    void ShowDamageFlash()
+    {
+        damageSplash.color = Color.Lerp(damageSplash.color, flashColor, flashSpeed);
+        if (CompareColors(damageSplash.color, flashColor))
+        {
+            flashOn = false;
+            flashOff = true;
+        }
+    }
+
+    void HideDamageFlash()
+    {
+        damageSplash.color = Color.Lerp(damageSplash.color, Color.clear, flashSpeed);
+        if (CompareColors(damageSplash.color, Color.clear))
+        {
+            flashOff = false;
+        }
+    }
+
+    private bool CompareColors(Color first, Color second)
+    {
+        bool redValue = Mathf.Abs(first.r - second.r) < .05f;
+        bool greenValue = Mathf.Abs(first.g - second.g) < .05f;
+        bool blueValue = Mathf.Abs(first.b - second.b) < .05f;
+        bool alphaValue = Mathf.Abs(first.a - second.a) < .1f;
+
+        return redValue && greenValue && blueValue && alphaValue;
     }
 }
