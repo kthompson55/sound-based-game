@@ -90,6 +90,12 @@ public class SpiritualBody : NetworkBehaviour
 
         //Debug.Log("TransformPosition: " + transform.position);
 
+        if (physicalBody != null)
+        {
+            this.transform.rotation = physicalBody.transform.rotation;
+            physicalBody.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+        }
+
         UpdateIsAttacking();
         UpdateAttack();
     }
