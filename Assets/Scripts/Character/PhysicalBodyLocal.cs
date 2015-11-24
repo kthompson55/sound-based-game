@@ -153,7 +153,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         }
         else
         {
-            if ((controller.isGrounded && !jumping)||true)
+            if ((controller.isGrounded && !jumping))
             {
                 gravityVelocity += Physics.gravity.y * Time.deltaTime;
                 yMovement = gravityVelocity * Time.deltaTime;
