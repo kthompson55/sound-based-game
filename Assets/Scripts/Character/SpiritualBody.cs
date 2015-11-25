@@ -43,7 +43,8 @@ public class SpiritualBody : NetworkBehaviour
         #region Camera Fixes
         if (!isLocalPlayer) return;
 
-        
+        Cursor.lockState = CursorLockMode.None;
+        Cursor.visible = true;
 
         if (EchoManage == null)
         {
@@ -106,21 +107,21 @@ public class SpiritualBody : NetworkBehaviour
 
     void UpdateIsAttacking()
     {
-        //Debug.Log("Is Attacking");
+        
+        //Spawn Echo
         if (Input.GetMouseButtonDown(1))
         {
-            //Debug.Log("Right click");
             Ray ray = ((Camera)followingCamera.GetComponent<Camera>()).ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
-            if (Physics.Raycast(ray, out hit, Mathf.Infinity))
+            if (Physics.Raycast(ray, out hit, Mathf.Infinity, 1 << 9))
             {
-               EchoSpawner echo = EchoManage.GetComponent<EchoManager>().spawnAnEchoLocation(hit.point).GetComponent<EchoSpawner>();
-               echo.echoSpeed = 7.5f;
-               echo.maxRadius = 15.0f;
-               echo.fadeRate = 1.5f;
+                    EchoSpawner echo = EchoManage.GetComponent<EchoManager>().spawnAnEchoLocation(hit.point).GetComponent<EchoSpawner>();
+                    echo.echoSpeed = 7.5f;
+                    echo.maxRadius = 15.0f;
+                    echo.fadeRate = 1.5f;
             }
         }
-
+        //Attacking
         if (!attacking&&!returning&&Input.GetMouseButtonDown(0))
         {
             Debug.Log("Attacking");

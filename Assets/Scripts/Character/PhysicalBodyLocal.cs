@@ -298,7 +298,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
 
     void OnCollisionStay(Collision collisionInfo)
     {
-        Debug.Log(collisionInfo.gameObject.name);
+        //Debug.Log(collisionInfo.gameObject.name);
     }
 
 }
