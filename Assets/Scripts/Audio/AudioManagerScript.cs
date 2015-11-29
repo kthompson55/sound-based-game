@@ -15,7 +15,7 @@ public class AudioManagerScript : MonoBehaviour {
         foreach (GameObject s in soundList)
         {
             MySoundScript script = s.GetComponent<MySoundScript>();
-            if (script.time > script.endTime)
+            if (script.getTime() > script.endTime)
             {
                 soundList.Remove(s);
                 Destroy(s);

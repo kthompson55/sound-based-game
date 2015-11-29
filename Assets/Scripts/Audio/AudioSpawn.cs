@@ -5,6 +5,7 @@ using System.Collections;
 public class AudioSpawn : MonoBehaviour {
     public AudioClip clip;
     public Transform position;
+    public Transform SecondPosition;
     public AudioManagerScript manage;
 
 	// Use this for initialization
