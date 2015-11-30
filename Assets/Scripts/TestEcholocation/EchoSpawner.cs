@@ -93,8 +93,8 @@ public class EchoSpawner : MonoBehaviour {
 
         if (echoColor.r != 0)
         {
-            Debug.Log(echoColor);
-            Debug.Log(echolLocation);
+            //Debug.Log(echoColor);
+            //Debug.Log(echolLocation);
         }
     }
 }

@@ -153,7 +153,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
         }
         else
         {
-            if (controller.isGrounded && !jumping)
+            if ((controller.isGrounded && !jumping))
             {
                 gravityVelocity += Physics.gravity.y * Time.deltaTime;
                 yMovement = gravityVelocity * Time.deltaTime;
@@ -295,4 +295,10 @@ public class PhysicalBodyLocal : NetworkBehaviour
         leavingWater = true;
         followingCamera.GetComponent<Blur>().enabled = false;
     }
+
+    void OnCollisionStay(Collision collisionInfo)
+    {
+        //Debug.Log(collisionInfo.gameObject.name);
+    }
+
 }
