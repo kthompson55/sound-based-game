@@ -27,19 +27,19 @@ public class CameraControlsWithWallCollisions : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(target)
+        if (target)
         {
             //Vector3 wantedPosition = target.TransformPoint(0, height, -distance);
-            Vector3 wantedPosition = target.TransformPoint(0, 0, -distance);
+            Vector3 wantedPosition = target.TransformPoint(0, height, -distance);
             wantedPosition = new Vector3(wantedPosition.x, transform.position.y, wantedPosition.z);
 
             // check to see if there is anything behind the target
             RaycastHit hit;
-            Vector3 back = target.transform.TransformDirection(-1 * Vector3.forward);
+            Vector3 back = target.TransformDirection(-1 * Vector3.forward) + bumperRayOffset; //target.transform.TransformDirection(-1 * Vector3.forward) + bumperRayOffset;
+            Debug.DrawRay(target.TransformPoint(bumperRayOffset), back, Color.white);
 
             // cast the bumper ray out from rear and check to see if there is anything behind
-            if (Physics.Raycast(target.TransformPoint(bumperRayOffset), back, out hit, bumperDistanceCheck)
-                && hit.transform != target) // ignore ray-casts that hit the user. DR
+            if (Physics.Raycast(target.TransformPoint(bumperRayOffset)/*target.transform.position + bumperRayOffset*/, back, out hit, bumperDistanceCheck) && hit.transform != target) // ignore ray-casts that hit the user. DR
             {
                 // clamp wanted position to hit position
                 wantedPosition.x = hit.point.x;
@@ -64,7 +64,7 @@ public class CameraControlsWithWallCollisions : MonoBehaviour
 
     void LateUpdate()
     {
-        if(!target)
+        if (!target)
         {
             GameObject play = GameObject.Find("PhysicalBody_working(Clone)");
             if (play != null)
