@@ -8,10 +8,14 @@ using UnityStandardAssets.ImageEffects;
 [RequireComponent(typeof(Rigidbody))]
 [RequireComponent(typeof(CharacterController))]
 [RequireComponent(typeof(Animator))]
+[RequireComponent(typeof(AudioSource))]
 public class PhysicalBodyLocal : NetworkBehaviour
 {
     public GameObject followingCamera;
     public GameObject otherCamera;
+    public AudioClip[] footsteps;
+    public AudioClip jumpSound;
+    public AudioClip landingSound;
 
     public float speed;
     public float runMultiplier;
@@ -34,6 +38,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
     private Animator animator;
     private CharacterController controller;
     private Rigidbody rigidbody;
+    private AudioSource audio;
     private bool jumping;
     private float jumpTracking;
     private Vector3 jumpingMovementDirection;
@@ -44,15 +49,20 @@ public class PhysicalBodyLocal : NetworkBehaviour
     private float currJumpCap = 0;
     private float gravityVelocity;
     private float fallTime;
+    private bool walkingSoundCooldown;
+    private bool lastFrameJumping;
 
     void Start()
     {
         waitSoundTime = System.DateTime.Now;
         controller = GetComponent<CharacterController>();
         rigidbody = GetComponent<Rigidbody>();
+        audio = GetComponent<AudioSource>();
         jumping = false;
+        lastFrameJumping = false;
         currJumpCap = gameObject.transform.localPosition.y + jumpHeight;
         animator = GetComponent<Animator>();
+        walkingSoundCooldown = false;
     }
 
     void Update()
@@ -149,12 +159,19 @@ public class PhysicalBodyLocal : NetworkBehaviour
                 yMovement = gravityVelocity * Time.deltaTime;
                 fallTime = 0;
 
+                if (lastFrameJumping)
+                {
+                    audio.PlayOneShot(landingSound);
+                    lastFrameJumping = false;
+                }
+
                 if (Input.GetButton("Jump"))
                 {
                     jumpTracking = 0;
                     jumping = true;
                     jumpingMovementDirection = new Vector3(xMovement, 0, zMovement);
                     currJumpCap = transform.localPosition.y + jumpHeight + Physics.gravity.y * Time.deltaTime;
+                    audio.PlayOneShot(jumpSound);
                 }
                 else if (Input.GetButton("Sprint"))
                 {
@@ -170,6 +187,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
                     gravityVelocity = (Physics.gravity.y * Time.deltaTime * fallTime);
                     yMovement = gravityVelocity;
                     fallTime += Time.deltaTime * 3.0f;
+                    lastFrameJumping = true;
                 }
                 else
                 {
@@ -177,6 +195,7 @@ public class PhysicalBodyLocal : NetworkBehaviour
                     float jumpShift = (jumpSpeed + gravityVelocity) * Time.deltaTime;
                     jumpTracking += jumpShift;
                     yMovement = jumpShift;
+                    lastFrameJumping = true;
                     if (jumpTracking >= jumpHeight)
                     {
                         jumping = false;
@@ -229,6 +248,17 @@ public class PhysicalBodyLocal : NetworkBehaviour
             animator.SetFloat("Turn", 0);
         }
 
+        if (Mathf.Abs(xMovement) > 0 || Mathf.Abs(zMovement) > 0)
+        {
+            System.Random r = new System.Random();
+            int audioToPlayIndex = r.Next(footsteps.Length);
+            if (!walkingSoundCooldown && controller.isGrounded)
+            {
+                audio.PlayOneShot(footsteps[audioToPlayIndex]);
+                StartCoroutine(ResetWalkSound(sprinting ? .25f : .4f));
+            }
+        }
+
         // change rotation based on current camera angle
         transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
@@ -238,6 +268,13 @@ public class PhysicalBodyLocal : NetworkBehaviour
         controller.Move(cameraRotation * moveVector);
 
         previousHRotation = hRotation;
+    }
+
+    private IEnumerator ResetWalkSound(float time)
+    {
+        walkingSoundCooldown = true;
+        yield return new WaitForSeconds(time);
+        walkingSoundCooldown = false;
     }
 
     [ClientRpc]
