@@ -35,11 +35,11 @@ public class CameraControlsWithWallCollisions : MonoBehaviour
 
             // check to see if there is anything behind the target
             RaycastHit hit;
-            Vector3 back = target.transform.TransformDirection(-1 * (Vector3.forward + bumperRayOffset)); //target.transform.TransformDirection(-1 * Vector3.forward) + bumperRayOffset;
-            Debug.DrawRay(target.transform.position + bumperRayOffset, back, Color.white);
+            Vector3 back = target.TransformDirection(-1 * Vector3.forward) + bumperRayOffset; //target.transform.TransformDirection(-1 * Vector3.forward) + bumperRayOffset;
+            Debug.DrawRay(target.TransformPoint(bumperRayOffset), back, Color.white);
 
             // cast the bumper ray out from rear and check to see if there is anything behind
-            if (Physics.Raycast(/*target.TransformPoint(bumperRayOffset)*/target.transform.position + bumperRayOffset, back, out hit, bumperDistanceCheck) && hit.transform != target) // ignore ray-casts that hit the user. DR
+            if (Physics.Raycast(target.TransformPoint(bumperRayOffset)/*target.transform.position + bumperRayOffset*/, back, out hit, bumperDistanceCheck) && hit.transform != target) // ignore ray-casts that hit the user. DR
             {
                 // clamp wanted position to hit position
                 wantedPosition.x = hit.point.x;
