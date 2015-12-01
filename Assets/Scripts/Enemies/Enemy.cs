@@ -21,7 +21,7 @@ public class Enemy : NetworkBehaviour
     public bool isChasing;
     public bool isWaiting;
     public bool stopChasing;
-    private DateTime waitSoundTime;
+    public DateTime waitSoundTime;
     public bool debugOn = false;
 
     void Start() {
@@ -138,7 +138,7 @@ public class Enemy : NetworkBehaviour
                 NextTarget();
             }
         }
-        
+
         if(System.DateTime.Now.Subtract(waitSoundTime).Seconds>=5){
             waitSoundTime = System.DateTime.Now;
             EchoManager things = GameObject.Find("EchoManager").GetComponent<EchoManager>();

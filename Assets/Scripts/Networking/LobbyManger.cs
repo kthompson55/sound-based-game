@@ -23,8 +23,6 @@ public class LobbyManger : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 
-        Debug.Log("Hi");
-
         if (mnm == null)
         {
             mnm = GameObject.Find("NetworkManager").GetComponent<MyNetworkManager>();

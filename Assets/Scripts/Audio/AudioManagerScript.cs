@@ -12,20 +12,24 @@ public class AudioManagerScript : MonoBehaviour {
     }
 
 	void Update () {
+        List<GameObject> removeableList = new List<GameObject>();
         foreach (GameObject s in soundList)
         {
             MySoundScript script = s.GetComponent<MySoundScript>();
             if (script.getTime() > script.endTime)
             {
-                soundList.Remove(s);
-                Destroy(s);
+                removeableList.Add(s);
             }
+        }
+        foreach (GameObject s in removeableList)
+        {
+            soundList.Remove(s);
+            Destroy(s);
         }
     }
 
     public void Spawn(AudioClip clip, Transform position, float timeToPlay)
     {
-        Debug.Log("Manager Spawning");
         if (Physical.enabled)
         {
             physicalSpawn(position, clip, timeToPlay);

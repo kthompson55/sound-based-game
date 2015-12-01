@@ -20,7 +20,6 @@ public class AudioSpawn : MonoBehaviour {
 
     public void spawn(float TimeToEnd = 10.0f)
     {
-        Debug.Log("Spawner Spawning");
         if (manage == null)
         {
             manage = GameObject.Find("AudioManager").GetComponent<AudioManagerScript>();
