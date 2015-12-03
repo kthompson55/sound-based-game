@@ -15,6 +15,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
     public AudioClip[] footsteps;
     public AudioClip jumpSound;
     public AudioClip landingSound;
+    public ParticleSystem dustCloud;
 
     public float speed;
     public float runMultiplier;
@@ -213,6 +214,18 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
             animator.SetFloat("Turn", 0);
         }
 
+        if(controller.isGrounded && groundMotion.magnitude > 0)
+        {
+            if(!dustCloud.isPlaying)
+            {
+                dustCloud.Play();
+            }
+        }
+        else
+        {
+            dustCloud.Stop();
+        }
+
         if(Mathf.Abs(xMovement) > 0 || Mathf.Abs(zMovement) > 0)
         {
             System.Random r = new System.Random();
@@ -225,7 +238,7 @@ public class PhysicalBodyWithoutNetworking : MonoBehaviour
         }
         
         // change rotation based on current camera angle
-        transform.localEulerAngles = new Vector3(transform.localEulerAngles.x, hRotation, transform.localEulerAngles.z);
+        transform.localEulerAngles = new Vector3(0, hRotation, 0);
         Quaternion cameraRotation = Quaternion.Euler(transform.localEulerAngles);
         followingCamera.transform.position = new Vector3(followingCamera.transform.position.x, transform.position.y + vRotation, followingCamera.transform.position.z);
         // apply movement
