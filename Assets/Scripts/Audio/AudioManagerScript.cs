@@ -68,7 +68,7 @@ public class AudioManagerScript : MonoBehaviour {
         soundSource.transform.position = position.position;
         soundSource.spatialBlend = 1.0f;
         soundSource.rolloffMode = AudioRolloffMode.Linear;
-        soundSource.maxDistance = 5.0f;
+        soundSource.maxDistance = 12.0f;
         soundSource.volume = 0.25f;
         soundSource.clip = clip;
         soundSource.Play();
