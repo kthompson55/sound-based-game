@@ -28,7 +28,7 @@ public class SpawningEchos : MonoBehaviour {
             spawnTime = 0.0f;
             GameObject temp = em.spawnAnEchoLocation(gameObject.transform.position);
             EchoSpawner t = temp.GetComponent<EchoSpawner>();
-            Debug.Log(gameObject.name + ": "+ t.getEchoLocation());
+            //Debug.Log(gameObject.name + ": "+ t.getEchoLocation());
             t.echoColor = echoColor;
             t.maxRadius = maxRadius;
             t.fade = fade;
