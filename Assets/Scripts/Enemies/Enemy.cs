@@ -10,7 +10,7 @@ public class Enemy : NetworkBehaviour
     public float speed;
     public int damage;
     public bool isPatrolling;
-    public float waitDuration;
+    public float waitDuration = 1.5f;
 
     private CharacterController controller;
     public Vector3 fromPosition;
@@ -22,7 +22,7 @@ public class Enemy : NetworkBehaviour
     public bool isWaiting;
     public bool stopChasing;
     public DateTime waitSoundTime;
-    public bool debugOn = false;
+    public bool debugOn = true;
 
     void Start() {
         nextNodeIndex = 0;
@@ -120,6 +120,7 @@ public class Enemy : NetworkBehaviour
                 isChasing = false;
                 isWaiting = true;
                 waitStart = 0;// System.DateTime.Now.Second;// .Ticks * 10000;
+                damagePlayer();
             }
         }
 
@@ -183,7 +184,19 @@ public class Enemy : NetworkBehaviour
             ChangeTarget(player.transform.position);
         }
     }
+
+    public void damagePlayer()
+    {
+        GameObject player = GameObject.Find("PhysicalBody_working(Clone)");
+        if (player != null)
+        {
+            Health hp = player.GetComponent<Health>();
+            hp.DamagePlayer(damage);
+        }
+    }
+
 }
+
 
 
 //enemy patrols around nodes

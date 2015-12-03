@@ -49,6 +49,25 @@ public class Health : MonoBehaviour
             Application.LoadLevel("Main_Menu");
         }
     }
+
+    public void DamagePlayer(int numDamage)
+    {
+        currHealth -= numDamage;
+    }
+
+    //OnCollisionEnter is the right one. The player isn't a trigger so when the enemy collides with the player they don't trigger the OnTriggerEnter function.
+    //void OnCollisionEnter(Collision col)
+    //{
+    //    MonoBehaviour damageSource = GetDamageSource(col.gameObject.transform);
+    //    if (damageSource != null && !hit)
+    //    {
+    //        currHealth -= col.gameObject.tag == "Enemy" ? col.gameObject.GetComponent<Enemy>().damage : col.gameObject.GetComponent<Trap>().damage;
+    //        currHealth = Mathf.Clamp(currHealth, 0, maxHealth);
+    //        hit = true;
+    //        hitTime = System.DateTime.Now.Ticks * 10000;
+    //        hpBar.StartFlash();
+    //    }
+    //}
 	
 	void OnTriggerEnter (Collider col)
 	{
@@ -106,4 +125,5 @@ public class Health : MonoBehaviour
 
         return behaviour;
     }
+
 }
