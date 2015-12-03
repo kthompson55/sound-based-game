@@ -74,4 +74,13 @@ public class EchoManager : MonoBehaviour {
         }
 
     }
+
+    void OnDestroy()
+    {
+        for(int run=0; run<MAX_NUMBER_OF_ECHOS; run++){
+            whatToSpawn.GetComponent<EchoSpawner>().echoMaterial.SetFloat("_Radius" + run, 0.0f);
+            whatToSpawn.GetComponent<EchoSpawner>().echoMaterial.SetFloat("_Fade" + run, 0.0f);
+            whatToSpawn.GetComponent<EchoSpawner>().echoMaterial.SetColor("_MainColor" + run, Color.white);
+        }
+    }
 }
