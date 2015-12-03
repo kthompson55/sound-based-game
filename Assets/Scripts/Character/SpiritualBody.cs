@@ -23,6 +23,7 @@ public class SpiritualBody : NetworkBehaviour
     {
         AttackObject.GetComponent<SphereCollider>().isTrigger = false;
         AttackObject.GetComponent<MeshRenderer>().enabled = false;
+        AttackObject.GetComponent<TrailRenderer>().enabled = false;
         attacking = false;
 
         //Spawn UI for this player mabye might also spawn with the physical player
@@ -152,6 +153,7 @@ public class SpiritualBody : NetworkBehaviour
             {
                 position = physicalBody.transform.position;
                 returning = false;
+                AttackObject.GetComponent<TrailRenderer>().enabled = false;
                 AttackObject.GetComponent<MeshRenderer>().enabled = false;
             }
         }
@@ -183,6 +185,7 @@ public class SpiritualBody : NetworkBehaviour
             {
                 AttackObject.GetComponent<MeshRenderer>().enabled = false;
                 AttackObject.GetComponent<SphereCollider>().enabled = false;
+                AttackObject.GetComponent<TrailRenderer>().enabled = false;
                 AttackObject.GetComponent<SphereCollider>().isTrigger = false;
                 attacking = false;
             }
@@ -197,6 +200,7 @@ public class SpiritualBody : NetworkBehaviour
         else {
             AttackObject.GetComponent<MeshRenderer>().enabled = false;
             AttackObject.GetComponent<SphereCollider>().isTrigger = false;
+            AttackObject.GetComponent<TrailRenderer>().enabled = false;
             AttackObject.GetComponent<SphereCollider>().enabled = false;
             attacking = false;
         }
@@ -217,6 +221,7 @@ public class SpiritualBody : NetworkBehaviour
             attacking = active = true;
             AttackObject.GetComponent<SphereCollider>().enabled = true;
             AttackObject.GetComponent<SphereCollider>().isTrigger = true;
+            AttackObject.GetComponent<TrailRenderer>().enabled = true;
             AttackObject.GetComponent<MeshRenderer>().enabled = true;
         }
     }

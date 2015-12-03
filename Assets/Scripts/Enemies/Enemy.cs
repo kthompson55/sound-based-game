@@ -139,13 +139,6 @@ public class Enemy : NetworkBehaviour
                 NextTarget();
             }
         }
-
-        if(System.DateTime.Now.Subtract(waitSoundTime).Seconds>=5){
-            waitSoundTime = System.DateTime.Now;
-            EchoManager things = GameObject.Find("EchoManager").GetComponent<EchoManager>();
-            GameObject t=things.spawnAnEchoLocation(gameObject.transform.position);
-            t.GetComponent<EchoSpawner>().echoColor = Color.red;
-        }
     }
 
     bool ReachedOrOverShotTarget(Vector3 path, Vector3 target){
