@@ -1,7 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-[RequireComponent(typeof(SpawningEchos))]
 [RequireComponent(typeof(AudioSpawn))]
 public class TimedPlay : MonoBehaviour {
     private float time;
