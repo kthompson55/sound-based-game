@@ -4,23 +4,27 @@ using System.Collections;
 
 [RequireComponent(typeof(BoxCollider))]
 [RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(AudioSource))]
 public class Health : MonoBehaviour
 {
     public HealthBar hpBar;
     public SkinnedMeshRenderer characterMesh;
     public Material opaqueMaterial;
     public Material transparentMaterial;
+    public AudioClip damageSound;
     public float invincibilityTime = 0.5f;
     public int maxHealth;
     public int currHealth;
-    
+
+    private AudioSource audio;
     private BoxCollider collisionBox;
 	private bool hit;
 	
 	void Start ()
 	{
 		currHealth = maxHealth;
-		collisionBox = GetComponent<BoxCollider> ();
+		collisionBox = GetComponent<BoxCollider>();
+        audio = GetComponent<AudioSource>();
 		hit = false;
         if(!hpBar)
         {
@@ -80,6 +84,7 @@ public class Health : MonoBehaviour
         {
             currHealth -= currentObject.gameObject.tag == "Enemy" ? currentObject.gameObject.GetComponent<Enemy>().damage : currentObject.gameObject.GetComponent<Trap>().damage;
             currHealth = Mathf.Clamp(currHealth, 0, maxHealth);
+            audio.PlayOneShot(damageSound);
             StartCoroutine(GotHit());
             hpBar.StartFlash();
 		}
