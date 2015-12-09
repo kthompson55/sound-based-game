@@ -8,7 +8,7 @@ public class TrapTrigger : MonoBehaviour
     private Animator[] trapAnimators;
     public float cooldown;
     public bool stuck;
-    float timer = 0;
+    public float timer = 0;
 
     void Start() {
         triggered = false;
@@ -35,7 +35,8 @@ public class TrapTrigger : MonoBehaviour
     {
         if (IsPlayer(col))
         {
-            ActivateTrigger();
+            timer = 0.0f;
+            //ActivateTrigger();
         }else if (!stuck & col.gameObject.tag.Equals("Block"))
         {
             Stuck();
@@ -48,6 +49,11 @@ public class TrapTrigger : MonoBehaviour
         {
             ResetTrigger();
         }
+        else if (!stuck & col.gameObject.tag.Equals("Block"))
+        {
+            UnStuck();
+        }
+
     }
 
     private bool IsPlayer(Collider col) {
@@ -76,10 +82,19 @@ public class TrapTrigger : MonoBehaviour
         return triggered;
     }
 
-    public void Stuck() {
+    public void Stuck()
+    {
         foreach (Animator anim in trapAnimators)
         {
             anim.SetBool("stuck", true);
+        }
+    }
+
+    public void UnStuck()
+    {
+        foreach (Animator anim in trapAnimators)
+        {
+            anim.SetBool("stuck", false);
         }
     }
    
