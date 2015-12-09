@@ -42,7 +42,7 @@ public class AudioManagerScript : MonoBehaviour {
 
     private void spiritSpawn(Transform position, AudioClip clip, float timeToPlay)
     {
-        Debug.Log("Spirit Spawn");
+        //Debug.Log("Spirit Spawn");
         GameObject sound = Instantiate(mySoundPrefab);
         AudioSource soundSource = sound.AddComponent<AudioSource>();
         soundSource.transform.position = position.position;
@@ -55,7 +55,7 @@ public class AudioManagerScript : MonoBehaviour {
 
     private void physicalSpawn(Transform position, AudioClip clip, float timeToPlay)
     {
-        Debug.Log("Physical Spawn");
+        //Debug.Log("Physical Spawn");
 
         GameObject sound = Instantiate(mySoundPrefab);
 
