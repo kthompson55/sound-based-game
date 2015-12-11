@@ -311,7 +311,19 @@ public class PhysicalBodyLocal : NetworkBehaviour
 
     void OnCollisionStay(Collision collisionInfo)
     {
-        //Debug.Log(collisionInfo.gameObject.name);
+
+        if (collisionInfo.gameObject.GetComponent<Enemy>() != null)
+        {
+            gameObject.GetComponent<Health>().DamagePlayer(collisionInfo.gameObject.GetComponent<Enemy>().getDamage());
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.GetComponent<Enemy>() != null)
+        {
+            gameObject.GetComponent<Health>().DamagePlayer(other.gameObject.GetComponent<Enemy>().getDamage());
+        }
     }
 
 }
