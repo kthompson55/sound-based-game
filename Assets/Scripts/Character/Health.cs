@@ -13,12 +13,15 @@ public class Health : MonoBehaviour
     public Material transparentMaterial;
     public AudioClip damageSound;
     public float invincibilityTime = 0.5f;
+    public float regenSpeed = 5;
     public int maxHealth;
     public int currHealth;
+    public int amountToRegen = 5;
 
     private AudioSource audio;
     private BoxCollider collisionBox;
 	private bool hit;
+    private bool regeneratingHealth;
 	
 	void Start ()
 	{
@@ -26,6 +29,7 @@ public class Health : MonoBehaviour
 		collisionBox = GetComponent<BoxCollider>();
         audio = GetComponent<AudioSource>();
 		hit = false;
+        regeneratingHealth = false;
         if(!hpBar)
         {
             hpBar = FindObjectOfType<HealthBar>();
@@ -44,6 +48,10 @@ public class Health : MonoBehaviour
             MyNetworkManager.singleton.StopMatchMaker();
             //MyNetworkManager.singleton.StopClient();
             Application.LoadLevel("Main_Menu");
+        }
+        else if(!regeneratingHealth)
+        {
+            StartCoroutine(RegenerateHealth());
         }
     }
 
@@ -106,12 +114,23 @@ public class Health : MonoBehaviour
         yield return new WaitForSeconds(invincibilityTime / 2);
         characterMesh.material = opaqueMaterial;
     }
+
+    IEnumerator RegenerateHealth()
+    {
+        regeneratingHealth = true;
+        yield return new WaitForSeconds(regenSpeed);
+        if (currHealth <= maxHealth - amountToRegen)
+        {
+            currHealth += amountToRegen;
+        }
+        regeneratingHealth = false;
+    }
 	
 	public float GetHealthPercentage ()
 	{
         return ((float)currHealth) / ((float)maxHealth);
 	}
-
+    
     private MonoBehaviour GetDamageSource(Transform transform)
     {
         MonoBehaviour behaviour = null;
