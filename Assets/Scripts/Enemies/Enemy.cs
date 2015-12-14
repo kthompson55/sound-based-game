@@ -3,188 +3,84 @@ using UnityEngine.Networking;
 using System;
 
 [RequireComponent(typeof(Rigidbody))]
-[RequireComponent(typeof(CharacterController))]
 public class Enemy : NetworkBehaviour
 {
     public GameObject[] pathPoints;
-    public float speed;
+    public float speed=11.0f;
     public int damage;
-    public bool isPatrolling;
-    public float waitDuration = 1.5f;
+    public EnemyStateMachine stateMachine;
 
-    private CharacterController controller;
-    public Vector3 fromPosition;
-    public Vector3 targetPosition;
-    private float yMovement = 0;
-    private float waitStart;
-    private int nextNodeIndex;
-    public bool isChasing;
-    public bool isWaiting;
-    public bool stopChasing;
-    public DateTime waitSoundTime;
-    public bool debugOn = true;
+    private Rigidbody rb;
+    public bool didAttack = false;
+
 
     void Start() {
-        nextNodeIndex = 0;
-        waitStart = 0;
-        waitSoundTime = System.DateTime.Now;
-        controller = GetComponent<CharacterController>();
-        if (pathPoints.Length > 0) {
-            Vector3 starting = pathPoints[nextNodeIndex].transform.position;
-            starting.y = transform.position.y;
-            transform.position = starting;
-            NextTarget();
-        }
-            
-
-        fromPosition = transform.position;
-        targetPosition = transform.position;
-        isChasing = false;
-        isWaiting = false;
+                
+        stateMachine = new EnemyStateMachine();
+        stateMachine.Start(this);
+        rb = gameObject.GetComponent<Rigidbody>();
+        rb.maxDepenetrationVelocity = (3.0f);
+        
     }
 
     void OnTriggerEnter(Collider spirit)
     {
         if (spirit.GetComponent<SpiritualBody>() != null)
         {
-            isWaiting = true;
-            if (debugOn)
-            {
-                Debug.Log("Enemy has been hit!");
-            }
-           
-            waitStart = System.DateTime.Now.Second;// *10000;
+            stateMachine.waitTime = 3.0f;
         }
     }
 
-    void Update() 
+    public int getDamage()
+    {
+        int ret = 0;
+        if (!didAttack)
+        {
+            ret = damage;
+            didAttack = true;
+        }
+        return ret;
+    }
+
+    void Update()
     {
         if (!isServer) return;
 
-        //Debug.Log("Waiting: " + isWaiting);
-        //Debug.Log("Chasing: " + isChasing);
-
-        //waiting after reaching chase location
-        if (debugOn)
+        //Needs to be a wait time for when the hunting state is about to change.
+        Vector3 force = stateMachine.Update();
+        force = force * speed;
+        force = new Vector3(force.x, 0.0f, force.z);
+        if (rb.velocity.magnitude < speed)
         {
-            Debug.Log("Is waiting: " + isWaiting);
-            Debug.Log("Is chasing: " + isChasing);
-            Debug.Log("is Patrolling: " + isPatrolling);
+            rb.AddForce(force, ForceMode.Acceleration);
         }
-        
-        if (isWaiting) 
+        else
         {
-            //Debug.Log("Waiting");
-            //if ((System.DateTime.Now.Ticks * 10000) - waitStart > (waitDuration / 1000))
-            //Debug.Log("time waited: " + ((System.DateTime.Now.Second) - waitStart));
-            //Debug.Log("time to wait: " + waitDuration);
-            //Debug.Log(Time.deltaTime);
-            waitStart += Time.deltaTime;
-            //Debug.Log("Wait start: " + waitStart);
-            if (waitStart > waitDuration)//((System.DateTime.Now.Second) - waitStart) > (waitDuration))
-            {
-                if (debugOn)
-                {
-                    Debug.Log("Waiting time is up");
-                }
-                
-                isWaiting = false;
-                if(pathPoints.Length > 0)
-                    ChangeTarget(pathPoints[nextNodeIndex].transform.position);
-            }
-        } 
-        else if (isChasing) 
-        {
-            if (debugOn)
-            {
-                Debug.Log("Chasing");
-            }
-            
-            Vector3 path = targetPosition - fromPosition;
-            path.y = 0;
-            Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
-
-            //Debug.Log("from Position: " + fromPosition);
-            //Debug.Log("Target Position: " + targetPosition);
-            //transform.position = Vector3.Lerp(fromPosition, targetPosition, 0.5f * Time.deltaTime);
-            //controller.Move(new Vector3(direction.x, direction.y, direction.z));
-            controller.Move(direction);
-
-            if (ReachedOrOverShotTarget(path, targetPosition))
-            {
-                if (debugOn)
-                {
-                    Debug.Log("Reached or overshot target");
-                }
-               
-                isChasing = false;
-                isWaiting = true;
-                waitStart = 0;// System.DateTime.Now.Second;// .Ticks * 10000;
-                damagePlayer();
-            }
-        }
-
-        //don't patrol if chasing
-        else if (isPatrolling)  {
-            if (debugOn)
-            {
-                Debug.Log("Patrolling");
-            }
-            
-            Vector3 path = targetPosition - fromPosition;
-            path.y = 0;
-            Vector3 direction = Vector3.Normalize(path) * Time.deltaTime * speed;
-            controller.Move(new Vector3(direction.x, yMovement, direction.z));
-            if (ReachedOrOverShotTarget(path, targetPosition)){
-                NextTarget();
-            }
+            rb.velocity = rb.velocity.normalized * speed;
         }
     }
 
-    bool ReachedOrOverShotTarget(Vector3 path, Vector3 target){
-        //Debug.Log("Path: " + path);
-        //Debug.Log("Target: " + target);
-        //Debug.Log("Path mag: " + Vector3.Magnitude(path));
-        //Debug.Log("Mix mag: " + Vector3.Magnitude(fromPosition - transform.position));
-        return ( 
-            (transform.position.z == target.z && transform.position.x == target.x)
-            || Vector3.Magnitude(fromPosition - transform.position) > Vector3.Magnitude(path));
-    }
-    //auto change chase target to next point in path points []
-    void NextTarget() {
-        if (pathPoints.Length > 0) {
-            nextNodeIndex = (nextNodeIndex >= pathPoints.Length - 1) ? 0 : nextNodeIndex + 1;
-            ChangeTarget(pathPoints[nextNodeIndex].transform.position);
-        }
-    }
-
-    //shift change chase target to specific point
-    void ChangeTarget(Vector3 targetPos) {
-        gameObject.transform.LookAt(new Vector3(targetPos.x, gameObject.transform.position.y, targetPos.z));
-        fromPosition = transform.position;
-        targetPosition = targetPos;
-    }
-
-    public void ChasePlayer(Collider player) {
-        if (!isWaiting)
-        {
-            if (debugOn)
-            {
-                Debug.Log("Chase player!");
-            }
-           
-            isChasing = true;
-            ChangeTarget(player.transform.position);
-        }
-    }
-
-    public void damagePlayer()
+    void OnCollisionStay(Collision collisionInfo)
     {
-        GameObject player = GameObject.Find("PhysicalBody_working(Clone)");
-        if (player != null)
+        if (collisionInfo.gameObject.name.Contains("Body"))
         {
-            Health hp = player.GetComponent<Health>();
-            hp.DamagePlayer(damage);
+            rb.isKinematic = true;
+        }
+    }
+
+    void OnCollisionEnter(Collision other)
+    {
+        if (other.gameObject.name.Contains("Body"))
+        {
+            rb.isKinematic = true;
+        }
+    }
+
+    void OnCollisionExit(Collision other)
+    {
+        if (other.gameObject.name.Contains("Body"))
+        {
+            rb.isKinematic = false;
         }
     }
 

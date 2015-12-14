@@ -57,6 +57,20 @@ public class Health : MonoBehaviour
 
     public void DamagePlayer(int numDamage)
     {
+        if (numDamage > 0)
+        {
+           ParticleSystem[] p= gameObject.GetComponentsInChildren<ParticleSystem>();
+           if (p.Length > 0)
+           {
+               foreach (ParticleSystem i in p)
+               {
+                   if (i.name.Contains("Blood"))
+                   {
+                       i.Play(true);
+                   }
+               }
+           }
+        }
         currHealth -= numDamage;
     }
 

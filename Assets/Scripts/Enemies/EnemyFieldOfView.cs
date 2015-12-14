@@ -3,29 +3,42 @@ using System.Collections;
 
 public class EnemyFieldOfView : MonoBehaviour {
 
-    private Enemy attachedEnemy;
+    private EnemyStateMachine sm;
 
 	void Start () {
-        attachedEnemy = GetComponentInParent<Enemy>();
-        if (!attachedEnemy) {
-            Debug.LogError("This field of view doesn't have a parent with an enemy script; fov name: " + name);
-        }
+        sm = GetComponentInParent<Enemy>().stateMachine;
+
 	}
+
+    void Update()
+    {
+        if (sm == null)
+        {
+            sm = GetComponentInParent<Enemy>().stateMachine;
+        }
+    }
 
     void OnTriggerEnter(Collider col)
     {
-        UpdatePlayerLastKnownPosition(col);
+        if (col.gameObject.name.Contains("Body"))
+        {
+            sm.seeAPlayer = true;
+
+        }
     }
 
     void OnTriggerStay(Collider col) {
-        UpdatePlayerLastKnownPosition(col);
+        if (col.gameObject.name.Contains("Body"))
+        {
+            sm.seeAPlayer = true;
+        }
     }
 
-    void UpdatePlayerLastKnownPosition(Collider col)
+    void OnTriggerExit(Collider other)
     {
-        if ( col.gameObject.CompareTag("Player") ){
-             //Debug.Log("Enemy sees player!!");
-             attachedEnemy.ChasePlayer(col);
+        if (other.gameObject.name.Contains("Body"))
+        {
+            sm.seeAPlayer = false;
         }
     }
 }
